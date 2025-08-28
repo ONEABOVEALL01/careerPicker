@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Career & Interest Finder</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for "Poppins" and "Roboto" -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- html2pdf.js library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrNjY/0h9a+H7n4o9a4eJ4D3v5G5A5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5a5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* CSS variables for light/dark mode with improved contrast */
+        :root {
+            --bg-color-light: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            --bg-color-dark: linear-gradient(135deg, #1a232e 0%, #000000 100%);
+            --text-color-light: #1f2937;
+            --text-color-dark: #f9fafb;
+            --container-bg-light: rgba(255, 255, 255, 0.9);
+            --container-bg-dark: rgba(30, 41, 59, 0.9);
+            --container-border-light: rgba(255, 255, 255, 0.3);
+            --container-border-dark: rgba(255, 255, 255, 0.1);
+            --button-bg-light: #ffffff;
+            --button-bg-dark: #374151;
+            --button-text-light: #4b5563;
+            --button-text-dark: #e5e7eb;
+            --button-border-light: rgba(0, 0, 0, 0.2);
+            --button-border-dark: rgba(255, 255, 255, 0.2);
+            --primary-text-color-light: #dc2626;
+            --primary-text-color-dark: #f87171;
+            --box-shadow-light: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --box-shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --navbar-bg-light: rgba(255, 255, 255, 0.5);
+            --navbar-bg-dark: rgba(26, 35, 45, 0.7);
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+        .dark-mode .quiz-container {
+            background: var(--container-bg-dark);
+            border: 1px solid var(--container-border-dark);
+            box-shadow: var(--box-shadow-dark);
+        }
+        .dark-mode .app-btn {
+            background-color: var(--button-bg-dark);
+            color: var(--button-text-dark);
+            border: 1px solid var(--button-border-dark);
+        }
+        .dark-mode .app-btn.highlight {
+            background: linear-gradient(120deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark-mode #roadMap-btn {
+            background: linear-gradient(120deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+        .dark-mode .modal-content {
+            background-color: #1f2937;
+        }
+        .dark-mode .result-text { color: var(--text-color-dark); }
+        .dark-mode .result-desc-text { color: #d1d5db; }
+        .dark-mode #result-title { color: var(--primary-text-color-dark); }
+        .dark-mode .navbar-bg {
+            background-color: var(--navbar-bg-dark);
+        }
+        .dark-mode .text-red-500 { color: #f87171; }
+        .dark-mode .text-gray-900 { color: var(--text-color-dark); }
+        .dark-mode .text-gray-800 { color: var(--text-color-dark); }
+        .dark-mode .text-gray-700 { color: #d1d5db; }
+        .dark-mode .text-gray-600 { color: #9ca3af; }
+        .dark-mode .text-gray-400 { color: #6b7280; }
+        .dark-mode #degrees-container { background-color: #374151; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .dark-mode #degrees-list > div { background-color: #4b5563; }
+        .dark-mode .chat-messages .user-message { background-color: #4b5563; color: white; }
+        .dark-mode .chat-messages .bot-message { background-color: #6b7280; color: white; }
+        .dark-mode .chat-messages .bot-avatar { background-color: #f39c12; }
+        .dark-mode .loading-dot { background-color: #f39c12; }
+        .dark-mode #chat-input { background-color: #1f2937; border-color: #4b5563; color: white; }
+        .dark-mode .bg-white { background-color: #374151; }
+        .dark-mode .shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.6); }
+
+        /* General styles */
+
+        .app-btn {
+            height: 64px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 9999px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #4b5563; /* Default text color */
+        }
+        .app-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            color: #dc2626; /* Hover text color */
+        }
+
+        .dark-mode .app-btn:hover {
+            color: #f87171;
+        }
+
+        /* Custom animations */
+        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+        .animate-fade-in-down { animation: fadeInDown 0.5s ease-in-out; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Background elements animation */
+        .shape {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            animation: moveShape 20s infinite linear;
+            z-index: -10;
+        }
+        .shape-1 { width: 180px; height: 180px; top: 15%; left: 5%; animation-duration: 18s; }
+        .shape-2 { width: 120px; height: 120px; top: 70%; left: 85%; animation-duration: 22s; }
+        .shape-3 { width: 250px; height: 250px; top: 40%; left: 20%; animation-duration: 25s; }
+        .shape-4 { width: 100px; height: 100px; top: 5%; left: 90%; animation-duration: 15s; }
+        .shape-5 { width: 220px; height: 220px; top: 80%; left: 10%; animation-duration: 20s; }
+
+        @keyframes moveShape {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20vw, 15vh) scale(1.1); }
+            50% { transform: translate(-10vw, 25vh) scale(0.9); }
+            75% { transform: translate(15vw, -5vh) scale(1.2); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Base body styling */
+        body {
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--bg-color-light);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease-in-out;
+        }
+
+        /* Loading spinner animation */
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive quiz container */
+        .quiz-container {
+            width: 90%;
+            max-width: 800px;
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: var(--container-bg-light);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            min-height: 400px;
+            border: 1px solid var(--container-border-light);
+            transition: background 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            position: relative; /* Needed for the progress bar */
+        }
+
+        /* Responsive Design - Mobile First Approach */
+        /* Mobile devices (>500px) */
+        @media (max-width: 500px) {
+            .quiz-container {
+                width: 95%;
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+                min-height: 350px;
+            }
+            
+            .quiz-container h1 {
+                font-size: 1.75rem !important;
+                margin: 1.5rem 0 !important;
+            }
+            
+            .quiz-container h2 {
+                font-size: 1.5rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .app-btn {
+                height: 56px;
+                font-size: 0.875rem;
+                padding: 0 1rem;
+            }
+            
+            .app-btn.w-full {
+                width: 100% !important;
+            }
+            
+            .app-btn.w-64 {
+                width: 100% !important;
+            }
+            
+            .app-btn.w-56 {
+                width: 100% !important;
+            }
+            
+            .app-btn.w-80 {
+                width: 100% !important;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+                width: 95%;
+                max-height: 90%;
+            }
+            
+            .chatbot-bubble {
+                width: 280px;
+                height: 350px;
+                bottom: 1rem;
+                right: 1rem;
+            }
+            
+            .chatbot-container {
+                bottom: 1rem;
+                right: 1rem;
+            }
+            
+            #chatbot-toggle-btn {
+                height: 3.5rem;
+                width: 3.5rem;
+                font-size: 1.5rem;
+            }
+            
+            .shape-1 { width: 120px; height: 120px; }
+            .shape-2 { width: 80px; height: 80px; }
+            .shape-3 { width: 150px; height: 150px; }
+            .shape-4 { width: 60px; height: 60px; }
+            .shape-5 { width: 140px; height: 140px; }
+            
+            nav {
+                padding: 0 1rem !important;
+                height: 4rem !important;
+                font-size: small;
+            }
+            #user-display-name{
+        
+                font-size: smaller;
+            }
+            
+            nav h1 {
+                font-size: 10px !important;
+            }
+            
+            #dark-mode-toggle {
+                padding: 0.5rem 1rem !important;
+                font-size: 0.875rem !important;
+            }
+            
+            .pt-4 {
+                padding-top: 1rem !important;
+            }
+            
+            .pb-12 {
+                padding-bottom: 3rem !important;
+            }
+            
+            .my-12 {
+                margin: 2rem 0 !important;
+            }
+            
+            .mt-10 {
+                margin-top: 1.5rem !important;
+            }
+            
+            .mt-8 {
+                margin-top: 1rem !important;
+            }
+            
+            .space-y-4 > * + * {
+                margin-top: 1rem !important;
+            }
+            
+            .space-y-4.sm\:space-y-0 > * + * {
+                margin-top: 1rem !important;
+            }
+            
+            .px-4 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .px-6 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .px-12 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .px-24 {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .mx-5 {
+                margin-left: 1rem !important;
+                margin-right: 1rem !important;
+            }
+            
+            .w-full {
+                width: 100% !important;
+            }
+            
+            .h-12 {
+                height: 3rem !important;
+            }
+            
+            .h-20 {
+                height: 4rem !important;
+            }
+            
+            .text-4xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .text-5xl {
+                font-size: 1.75rem !important;
+            }
+            
+            .text-3xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 1.125rem !important;
+        }
+
+        #question-text{
+
+            font-size: 15px;
+        }
+
+      #chat-send-btn{
+        height: 40px;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #send-img{
+
+        height: 20px;
+        width: 20px;
+
+      }
+    }
+        /* Tablet devices (401px - 768px) */
+        @media (min-width: 401px) and (max-width: 768px) {
+            .quiz-container {
+                width: 92%;
+                padding: 2rem;
+                border-radius: 1.75rem;
+                min-height: 380px;
+            }
+            
+            .quiz-container h1 {
+                font-size: 2.25rem !important;
+                margin: 2rem 0 !important;
+            }
+            
+            .quiz-container h2 {
+                font-size: 1.75rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .app-btn {
+                height: 60px;
+                font-size: 0.95rem;
+            }
+            
+            .app-btn.w-64 {
+                width: 100% !important;
+            }
+            
+            .app-btn.w-56 {
+                width: 100% !important;
+            }
+            
+            .app-btn.w-80 {
+                width: 100% !important;
+            }
+            
+            .modal-content {
+                padding: 2rem;
+                width: 92%;
+            }
+            
+            .chatbot-bubble {
+                width: 320px;
+                height: 380px;
+            }
+            
+            .shape-1 { width: 140px; height: 140px; }
+            .shape-2 { width: 100px; height: 100px; }
+            .shape-3 { width: 180px; height: 180px; }
+            .shape-4 { width: 80px; height: 80px; }
+            .shape-5 { width: 160px; height: 160px; }
+            
+            nav {
+                padding: 0 2rem !important;
+            }
+            
+            nav h1 {
+                font-size: 2rem !important;
+            }
+            
+            .pt-4 {
+                padding-top: 1.5rem !important;
+            }
+            
+            .pb-12 {
+                padding-bottom: 4rem !important;
+            }
+            
+            .my-12 {
+                margin: 3rem 0 !important;
+            }
+            
+            .mt-10 {
+                margin-top: 2rem !important;
+            }
+            
+            .mt-8 {
+                margin-top: 1.5rem !important;
+            }
+            
+            .space-y-4 > * + * {
+                margin-top: 1.25rem !important;
+            }
+            
+            .px-4 {
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
+            }
+            
+            .px-6 {
+                padding-left: 2rem !important;
+                padding-right: 2rem !important;
+            }
+            
+            .px-12 {
+                padding-left: 2rem !important;
+                padding-right: 2rem !important;
+            }
+            
+            .px-24 {
+                padding-left: 2rem !important;
+                padding-right: 2rem !important;
+            }
+            
+            .mx-5 {
+                margin-left: 1.5rem !important;
+                margin-right: 1.5rem !important;
+            }
+            
+            .text-4xl {
+                font-size: 2.25rem !important;
+            }
+            
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 1.375rem !important;
+            }
+        }
+
+    
+        /* Extra small mobile devices (320px - 400px) */
+        @media (max-width: 320px) {
+            .quiz-container {
+                width: 98%;
+                padding: 1rem;
+                border-radius: 1rem;
+                min-height: 300px;
+            }
+            
+            .quiz-container h1 {
+                font-size: 1.5rem !important;
+                margin: 1rem 0 !important;
+            }
+            
+            .quiz-container h2 {
+                font-size: 1.25rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .app-btn {
+                height: 48px;
+                font-size: 0.8rem;
+                padding: 0 0.75rem;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+                width: 98%;
+                max-height: 95%;
+            }
+            
+            .chatbot-bubble {
+                width: 260px;
+                height: 300px;
+                bottom: 0.5rem;
+                right: 0.5rem;
+            }
+            
+            .chatbot-container {
+                bottom: 0.5rem;
+                right: 0.5rem;
+            }
+            
+            #chatbot-toggle-btn {
+                height: 3rem;
+                width: 3rem;
+                font-size: 1.25rem;
+            }
+            
+            .shape-1 { width: 80px; height: 80px; }
+            .shape-2 { width: 60px; height: 60px; }
+            .shape-3 { width: 100px; height: 100px; }
+            .shape-4 { width: 40px; height: 40px; }
+            .shape-5 { width: 90px; height: 90px; }
+            
+            nav {
+                padding: 0 0.5rem !important;
+                height: 3.5rem !important;
+
+            }
+            
+            nav h1 {
+                font-size: 10px !important;
+            }
+            
+            #dark-mode-toggle {
+                padding: 0.25rem 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .pt-4 {
+                padding-top: 0.5rem !important;
+            }
+            
+            .pb-12 {
+                padding-bottom: 2rem !important;
+            }
+            
+            .my-12 {
+                margin: 1rem 0 !important;
+            }
+            
+            .mt-10 {
+                margin-top: 1rem !important;
+            }
+            
+            .mt-8 {
+                margin-top: 0.75rem !important;
+            }
+            
+            .space-y-4 > * + * {
+                margin-top: 0.75rem !important;
+            }
+            
+            .px-4 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            .px-6 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            .px-12 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            .px-24 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            .mx-5 {
+                margin-left: 0.5rem !important;
+                margin-right: 0.5rem !important;
+            }
+            
+            .text-4xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .text-5xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .text-3xl {
+                font-size: 1rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 0.875rem !important;
+            }
+
+             #question-text{
+
+            font-size: 15px;
+        }
+
+        
+      #chat-send-btn{
+        height: 40px;
+        width: 40px;
+      }
+
+        }
+
+        /* Landscape orientation adjustments for mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .quiz-container {
+                min-height: 300px;
+                padding: 1.5rem;
+            }
+            
+            .my-12 {
+                margin: 1rem 0 !important;
+            }
+            
+            .mt-10 {
+                margin-top: 1rem !important;
+            }
+            
+            .mt-8 {
+                margin-top: 0.75rem !important;
+            }
+            
+            nav {
+                height: 3.5rem !important;
+            }
+            
+            .pt-4 {
+                padding-top: 1rem !important;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .quiz-container {
+                border-width: 0.5px;
+            }
+            
+            .app-btn {
+                border-width: 0.5px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .quiz-container {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+            
+            .chatbot-container,
+            #dark-mode-toggle,
+            .shape {
+                display: none !important;
+            }
+        }
+
+        /* Touch-friendly improvements for mobile */
+        @media (max-width: 768px) {
+            .app-btn {
+                min-height: 48px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            input[type="text"] {
+                font-size: 16px; /* Prevents zoom on iOS */
+                touch-action: manipulation;
+            }
+            
+            .quiz-container {
+                touch-action: manipulation;
+            }
+            
+            /* Improve scrolling on mobile */
+            body {
+                -webkit-overflow-scrolling: touch;
+                overflow-scrolling: touch;
+            }
+            
+            /* Better modal handling on mobile */
+            .modal {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .modal-content {
+                -webkit-overflow-scrolling: touch;
+                max-height: 85vh;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            .app-btn,
+            .shape,
+            .dark-mode-toggle,
+            .quiz-container {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .quiz-container {
+                border: 2px solid #000;
+            }
+            
+            .app-btn {
+                border: 2px solid #000;
+            }
+        }
+
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+            transition: background 0.5s ease-in-out;
+        }
+        
+        /* Progress bar styling */
+        #progress-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #dc2626 0%, #f87171 100%);
+            width: 0%;
+            border-radius: 1rem;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .dark-mode #progress-bar {
+            background: linear-gradient(90deg, #e74c3c 0%, #f87171 100%);
+        }
+
+        /* Chatbot styling */
+        .chatbot-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+        .chatbot-bubble {
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        .user-message {
+            background-color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: #d1e5f0;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-self: flex-start;
+            display: flex;
+            align-items: center;
+        }
+        .bot-avatar {
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.5rem;
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-dots {
+            display: flex;
+            align-items: center;
+        }
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: -0.32s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Dark mode toggle button animation */
+        .dark-mode-toggle {
+            transition: transform 0.3s ease-in-out;
+        }
+        .dark-mode-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+        .dark-mode .dark-mode-toggle:hover {
+            transform: scale(1.1) rotate(-15deg);
+        }
+
+        /* PDF styling improvements for dark mode */
+        .pdf-container.dark-mode h2,
+        .pdf-container.dark-mode h3,
+        .pdf-container.dark-mode p,
+        .pdf-container.dark-mode li {
+            color: black !important;
+        }
+        .pdf-container {
+            background-color: white !important;
+        }
+        .degrees-dropdown {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f1f5f9;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .degrees-dropdown {
+            background-color: #4b5563;
+        }
+        
+        .degrees-dropdown:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .dark-mode .degrees-dropdown:hover {
+            background-color: #6b7280;
+        }
+        
+        .degrees-dropdown .toggle-icon {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .degrees-dropdown.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .exams-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+        }
+
+        .exams-list.open {
+            max-height: 500px; /* A value large enough to fit content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="font-roboto text-lg font-bold">
+    <!-- Background Shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+
+    <!-- Navbar -->
+    <nav class="w-full h-20 flex items-center justify-between px-6 sm:px-12 bg-white/50 backdrop-blur-md shadow-md fixed top-0 z-50 navbar-bg transition-colors">
+        <div class="flex items-center">
+        
+            <h1 class="font-bold text-4xl text-gray-900 transition-colors">Career</h1>
+            <h1 class="font-bold text-4xl text-[rgba(77,68,255,0.862)] ml-1 transition-colors">Picker</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <p id="user-display-name" class="text-xl font-bold text-gray-700 hidden transition-colors">
+                <!-- User name will be displayed here -->
+            </p>
+            <button id="dark-mode-toggle" class="dark-mode-toggle text-xl px-4 py-2 rounded-full border border-gray-300 shadow-md">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Progress Bar -->
+    <div id="progress-bar-container" class="w-full h-2 bg-gray-200 dark:bg-gray-700 mt-20 transition-colors hidden">
+        <div id="progress-bar" class="h-full" style="width: 0%;"></div>
+    </div>
+
+    <div class="pt-4 pb-12 w-full flex flex-col items-center justify-center">
+    <!-- Home Screen (Login) -->
+    <div id="home-screen" class="flex justify-center items-center my-12 animate-fade-in w-full">
+        <div class="quiz-container text-center transition-colors">
+            <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-col justify-center items-center transition-colors">
+                <span>Welcome to</span>
+                <span class="text-red-500 mt-2 transition-colors">Career Picker</span>
+            </h1>
+            <p class="font-semibold text-base sm:text-lg text-gray-700 mt-8 px-4 sm:px-24 transition-colors">
+                Please enter your name to begin your journey.
+            </p>
+            <div class="flex flex-col justify-center items-center mt-10 space-y-4">
+                <input id="name-input" type="text" placeholder="Enter your name" class="h-12 w-full sm:w-80 px-4 rounded-full border border-gray-300 text-gray-900 dark:text-white bg-white dark:bg-gray-800 font-normal focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+                <button id="start-journey-btn" class="app-btn w-full sm:w-64 text-gray-600 bg-white">
+                    Start Your Journey
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome screen 1 (Qualification Selection) -->
+    <div id="welcome-screen-1" class="flex justify-center items-center my-12 animate-fade-in hidden w-full">
+        <div class="quiz-container text-center transition-colors">
+            <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-col justify-center items-center transition-colors">
+                <div class="flex">
+                
+                <span>Select Your</span>  <span class="text-red-500 transition-colors mx-3">Qualification</span>
+                  </div>
+            </h1>
+            <div class="flex flex-col sm:flex-row mt-10 sm:mt-20 justify-evenly items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button id="button-10th" class="app-btn w-full sm:w-56 text-gray-600 bg-white transition-all duration-300 hover:scale-105">
+                    10th Passed
+                </button>
+                <button id="button-12th" class="app-btn w-full sm:w-56 text-gray-600 bg-white transition-all duration-300 hover:scale-105">
+                    12th Passed
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome screen 2 (Quiz Intro) -->
+    <div id="quiz-intro-screen" class="flex justify-center items-center animate-fade-in hidden w-full">
+        <div class="quiz-container text-center transition-colors">
+            <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-col justify-center items-center transition-colors">
+               
+                <div>
+               
+                <span>Find Your</span>  <span class="text-red-500 transition-colors">Interest</span>
+                </div>
+            </h1>
+            <p class="font-semibold text-base sm:text-lg text-gray-700 mt-8 px-4 sm:px-24 transition-colors">
+                Answer 10 adaptive questions to discover the stream or career that perfectly matches your skills and passions.
+            </p>
+            <div class="flex justify-center mt-10">
+                <button id="start-quiz-btn" class="app-btn w-full sm:w-64 text-gray-600 bg-white">
+                    Start the Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz screen -->
+    <div id="quiz-screen" class="flex flex-col items-center animate-fade-in hidden w-full">
+        <div class="quiz-container text-center transition-colors">
+            <h2 id="question-text" class="text-2xl md:text-3xl font-bold mb-6 text-gray-800 animate-fade-in-down w-full px-4 transition-colors"></h2>
+            <div id="options-container" class="space-y-4 w-full px-4">
+                <!-- Buttons will be dynamically generated here by JavaScript -->
+            </div>
+            <div id="progress-text" class="mt-8 text-sm text-gray-400 font-normal transition-colors">
+                <!-- Progress will be updated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Result screen -->
+    <div id="results-screen" class="flex justify-center items-center animate-fade-in hidden w-full">
+        <div class="quiz-container transition-colors">
+            <h2 class="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 animate-fade-in-down text-center mt-10 transition-colors">Your Career Match</h2>
+            <div class="bg-white p-6 rounded-2xl shadow-md mb-6 mx-5 text-center transition-colors">
+                <h3 id="result-title" class="text-2xl font-bold mb-2 text-red-500 transition-colors"></h3>
+                <p id="result-description" class="font-semibold text-gray-600 transition-colors"></p>
+            </div>
+            <div id="degrees-container" class="bg-white p-6 rounded-2xl shadow-md mx-5 mt-6 hidden transition-colors">
+                <h4 class="text-xl font-bold mb-4 text-gray-800 text-center transition-colors">Suggested Degrees & Exams</h4>
+                <div id="degrees-list" class="space-y-4 ">
+                    <!-- Degrees will be dynamically added here -->
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-evenly items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-10">
+                <button id="restart-quiz-btn" class="app-btn w-full sm:w-64 bg-white text-gray-600 transition-all duration-300 hover:scale-105">
+                    Restart Quiz ↻
+                </button>
+                <button id="roadMap-btn" class="app-btn w-full sm:w-64 text-white bg-[linear-gradient(120deg,#f6d365_0%,#fda085_100%)] transition-all duration-300 hover:scale-105">
+                    Get Roadmap »
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Roadmap Modal -->
+    <div id="roadmap-modal" class="modal hidden">
+        <div class="modal-content transition-colors">
+            <div id="roadmap-content" class="p-4">
+                <h2 class="text-3xl font-bold mb-4 text-center text-gray-900 transition-colors">Your Personalized Roadmap</h2>
+                <div id="roadmap-loading-state" class="flex flex-col items-center hidden">
+                    <div class="loader"></div>
+                    <p class="text-gray-700 mt-4 text-center font-normal transition-colors">Generating your personalized roadmap...</p>
+                </div>
+                <div id="roadmap-data-container" class="flex flex-col items-center">
+                    <img id="roadmap-image" class="w-full h-auto rounded-xl mb-6 shadow-lg hidden" alt="AI-generated image for the career path">
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-end mt-6 space-y-4 sm:space-y-0 sm:space-x-4">
+                <button id="download-pdf-btn" class="app-btn w-full sm:w-64 bg-white text-gray-600 transition-all duration-300 hover:scale-105">
+                    Download PDF ⬇️
+                </button>
+                <button id="close-modal-btn" class="app-btn w-full sm:w-64 text-white bg-[linear-gradient(120deg,#fda085_0%,#a1c4fd_100%)] transition-all duration-300 hover:scale-105">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Bubble -->
+    <div id="chatbot-container" class="chatbot-container">
+        <button id="chatbot-toggle-btn" class="h-16 w-16 bg-[linear-gradient(120deg,#f6d365_0%,#fda085_100%)] rounded-full shadow-lg flex justify-center items-center text-white text-3xl transition-all transform hover:scale-110">
+            <i class="fa-solid fa-comments"></i>
+        </button>
+        <div id="chatbot-bubble" class="chatbot-bubble hidden mt-4">
+            <div class="p-4 bg-gray-800 text-white font-bold rounded-t-xl flex justify-between items-center transition-colors">
+                <span>Doubt Clearing Chatbot</span>
+                <button id="close-chat-btn" class="text-xl">&times;</button>
+            </div>
+            <div id="chat-messages" class="chat-messages flex flex-col space-y-2">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div id="chat-input-container" class="p-2 border-t border-gray-300 flex items-center transition-colors">
+                <input id="chat-input" type="text" placeholder="Ask a question..." class="flex-grow rounded-full px-4 py-2 border border-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 font-normal focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                <button id="chat-send-btn" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full">
+                    <i id="send-img" class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
