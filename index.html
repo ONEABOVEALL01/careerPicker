@@ -81,6 +81,15 @@
         .dark-mode .text-gray-700 { color: #d1d5db; }
         .dark-mode .text-gray-600 { color: #9ca3af; }
         .dark-mode .text-gray-400 { color: #6b7280; }
+        .dark-mode #logout-btn { 
+            background-color: #374151; 
+            color: #e5e7eb; 
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .dark-mode #logout-btn:hover { 
+            background-color: #dc2626; 
+            color: white;
+        }
         .dark-mode #degrees-container { background-color: #374151; border: 1px solid rgba(255, 255, 255, 0.2); }
         .dark-mode #degrees-list > div { background-color: #4b5563; }
         .dark-mode .chat-messages .user-message { background-color: #4b5563; color: white; }
@@ -119,6 +128,13 @@
 
         .dark-mode #roadMap-btn:hover {
             color: black !important;
+        }
+
+        /* Logout button hover effect */
+        #logout-btn:hover {
+            background-color: #dc2626 !important;
+            color: white !important;
+            border-color: #dc2626 !important;
         }
 
         /* Custom animations */
@@ -279,10 +295,18 @@
                 height: 4rem !important;
                 font-size: small;
             }
-            #user-display-name{
-        
-                font-size: smaller;
-            }
+                         #user-display-name{
+                 font-size: smaller;
+             }
+             
+             #user-section {
+                 space-y: 0.5;
+             }
+             
+             #logout-btn {
+                 font-size: 0.75rem !important;
+                 padding: 0.25rem 0.5rem !important;
+             }
             
             nav h1 {
                 font-size: 10px !important;
@@ -1419,9 +1443,16 @@
             <h1 class="font-bold text-4xl text-[rgba(77,68,255,0.862)] ml-1 transition-colors">Picker</h1>
         </div>
         <div class="flex items-center space-x-4">
-            <p id="user-display-name" class="text-xl font-bold text-gray-700 hidden transition-colors">
-                <!-- User name will be displayed here -->
-            </p>
+            <div id="user-section" class="flex flex-col items-center space-y-2 hidden">
+                <p id="user-display-name" class="text-xl font-bold text-gray-700 transition-colors">
+                    <!-- User name will be displayed here -->
+                </p>
+                <button id="logout-btn" class="text-sm px-3 py-1 rounded-full border border-gray-300 bg-white text-gray-600 transition-all duration-300 flex items-center space-x-1">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="icon-fallback"></span>
+                    <span>Logout</span>
+                </button>
+            </div>
             <button id="dark-mode-toggle" class="dark-mode-toggle text-xl px-4 py-2 rounded-full border border-gray-300 shadow-md">
                 <i class="fas fa-moon text-gray-800"></i>
                 <span class="icon-fallback"></span>
