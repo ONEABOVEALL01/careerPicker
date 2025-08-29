@@ -16,7 +16,7 @@
     <!-- html2pdf.js library for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrNjY/0h9a+H7n4o9a4eJ4D3v5G5A5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5g5G5a5a5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
     <style>
         /* CSS variables for light/dark mode with improved contrast */
         :root {
@@ -522,30 +522,30 @@
             }
             
             .quiz-container h1 {
-                font-size: 1.5rem !important;
+                font-size: 1.25rem !important;
                 margin: 1rem 0 !important;
             }
             
             .quiz-container h2 {
-                font-size: 1.25rem !important;
+                font-size: 1.125rem !important;
                 margin-bottom: 0.75rem !important;
             }
             
             .app-btn {
-                height: 48px;
-                font-size: 0.8rem;
-                padding: 0 0.75rem;
+                height: 44px;
+                font-size: 0.75rem;
+                padding: 0 0.5rem;
             }
             
             .modal-content {
-                padding: 1rem;
+                padding: 0.75rem;
                 width: 98%;
                 max-height: 95%;
             }
             
             .chatbot-bubble {
-                width: 260px;
-                height: 300px;
+                width: 240px;
+                height: 280px;
                 bottom: 0.5rem;
                 right: 0.5rem;
             }
@@ -556,9 +556,9 @@
             }
             
             #chatbot-toggle-btn {
-                height: 3rem;
-                width: 3rem;
-                font-size: 1.25rem;
+                height: 2.75rem;
+                width: 2.75rem;
+                font-size: 1rem;
             }
             
             .shape-1 { width: 80px; height: 80px; }
@@ -574,11 +574,11 @@
             }
             
             nav h1 {
-                font-size: 10px !important;
+                font-size: 0.875rem !important;
             }
             
             #dark-mode-toggle {
-                padding: 0.25rem 0.75rem !important;
+                padding: 0.25rem 0.5rem !important;
                 font-size: 0.75rem !important;
             }
             
@@ -647,16 +647,84 @@
                 font-size: 0.875rem !important;
             }
 
-             #question-text{
-
-            font-size: 15px;
-        }
-
-        
-      #chat-send-btn{
-        height: 40px;
-        width: 40px;
-      }
+            /* Question text and options for very small screens */
+            #question-text {
+                font-size: 0.875rem !important;
+                line-height: 1.3 !important;
+            }
+            
+            /* Degrees and exams text for very small screens */
+            #degrees-container h3 {
+                font-size: 1.125rem !important;
+            }
+            
+            #degrees-container p {
+                font-size: 0.8rem !important;
+            }
+            
+            #degrees-list > div {
+                font-size: 0.8rem !important;
+                padding: 0.5rem !important;
+            }
+            
+            /* Roadmap text for very small screens */
+            .roadmap-section h3 {
+                font-size: 1.125rem !important;
+            }
+            
+            .roadmap-section h4 {
+                font-size: 1rem !important;
+            }
+            
+            .roadmap-section p {
+                font-size: 0.8rem !important;
+            }
+            
+            .timeline-item h4 {
+                font-size: 0.875rem !important;
+            }
+            
+            .timeline-item p {
+                font-size: 0.75rem !important;
+            }
+            
+            /* AI chatbot adjustments for very small screens */
+            #chat-input {
+                font-size: 0.8rem !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+            
+            #chat-send-btn {
+                height: 32px !important;
+                width: 32px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Modal content for very small screens */
+            .modal-content h2 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal-content h3 {
+                font-size: 1.125rem !important;
+            }
+            
+            .modal-content p {
+                font-size: 0.8rem !important;
+            }
+            
+            /* Result text for very small screens */
+            #result-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .result-text {
+                font-size: 0.875rem !important;
+            }
+            
+            .result-desc-text {
+                font-size: 0.8rem !important;
+            }
 
         }
 
@@ -744,6 +812,137 @@
             .modal-content {
                 -webkit-overflow-scrolling: touch;
                 max-height: 85vh;
+            }
+            
+            /* Mobile text size adjustments */
+            .quiz-container h1 {
+                font-size: 1.75rem !important;
+                margin: 1.5rem 0 !important;
+            }
+            
+            .quiz-container h2 {
+                font-size: 1.5rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* Question text and options */
+            #question-text {
+                font-size: 1rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .app-btn {
+                font-size: 0.875rem !important;
+                padding: 0.75rem 1rem !important;
+                height: 52px !important;
+            }
+            
+            /* Degrees and exams text */
+            #degrees-container h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            #degrees-container p {
+                font-size: 0.875rem !important;
+            }
+            
+            #degrees-list > div {
+                font-size: 0.875rem !important;
+                padding: 0.75rem !important;
+            }
+            
+            /* Roadmap text */
+            .roadmap-section h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            .roadmap-section h4 {
+                font-size: 1.125rem !important;
+            }
+            
+            .roadmap-section p {
+                font-size: 0.875rem !important;
+            }
+            
+            .timeline-item h4 {
+                font-size: 1rem !important;
+            }
+            
+            .timeline-item p {
+                font-size: 0.8rem !important;
+            }
+            
+            /* Top career picker logo text */
+            nav h1 {
+                font-size: 1.5rem !important;
+            }
+            
+            /* AI chatbot size adjustments */
+            #chatbot-toggle-btn {
+                height: 3.5rem !important;
+                width: 3.5rem !important;
+                font-size: 1.5rem !important;
+            }
+            
+            .chatbot-bubble {
+                width: 280px !important;
+                height: 320px !important;
+            }
+            
+            .chatbot-bubble .p-4 {
+                padding: 0.75rem !important;
+            }
+            
+            #chat-input {
+                font-size: 0.875rem !important;
+                padding: 0.5rem 0.75rem !important;
+            }
+            
+            #chat-send-btn {
+                height: 36px !important;
+                width: 36px !important;
+                font-size: 0.875rem !important;
+            }
+            
+            /* Modal content adjustments */
+            .modal-content {
+                padding: 1.5rem !important;
+            }
+            
+            .modal-content h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .modal-content h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            .modal-content p {
+                font-size: 0.875rem !important;
+            }
+            
+            /* Result text adjustments */
+            #result-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .result-text {
+                font-size: 1rem !important;
+            }
+            
+            .result-desc-text {
+                font-size: 0.875rem !important;
+            }
+            
+            /* Progress bar */
+            #progress-bar {
+                height: 6px !important;
+            }
+            
+            /* Dark mode toggle */
+            #dark-mode-toggle {
+                font-size: 0.875rem !important;
+                padding: 0.5rem 0.75rem !important;
             }
         }
 
@@ -885,6 +1084,71 @@
         .dark-mode .dark-mode-toggle:hover {
             transform: scale(1.1) rotate(-15deg);
         }
+        
+        /* Ensure Font Awesome icons are visible */
+        .fas, .fa, .far, .fab {
+            display: inline-block !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            text-rendering: auto !important;
+            -webkit-font-smoothing: antialiased !important;
+        }
+        
+        /* Specific icon visibility fixes */
+        #dark-mode-toggle .fas,
+        #chatbot-toggle-btn .fas,
+        #close-chat-btn .fas,
+        #chat-send-btn .fas,
+        #download-pdf-btn .fas,
+        #close-modal-btn .fas {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Debug styles to ensure icons are visible */
+        #dark-mode-toggle i,
+        #chatbot-toggle-btn i,
+        #close-chat-btn i,
+        #chat-send-btn i,
+        #download-pdf-btn i,
+        #close-modal-btn i {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            font-size: inherit !important;
+        }
+        
+        /* Ensure button content is visible */
+        #dark-mode-toggle,
+        #chatbot-toggle-btn,
+        #close-chat-btn,
+        #chat-send-btn,
+        #download-pdf-btn,
+        #close-modal-btn {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        /* Hide fallback icons when Font Awesome is working */
+        .icon-fallback {
+            display: none;
+            font-size: 1.2em;
+            margin-left: 0.25rem;
+        }
+        
+        /* Show fallback icons when Font Awesome fails */
+        .fas:not([class*="fa-"]):empty + .icon-fallback,
+        .fas:not([class*="fa-"]):empty ~ .icon-fallback {
+            display: inline-block !important;
+        }
+        
+        /* Alternative fallback detection */
+        .fas:empty + .icon-fallback,
+        .fas:empty ~ .icon-fallback {
+            display: inline-block !important;
+        }
 
         /* PDF styling improvements for dark mode */
         .pdf-container.dark-mode h2,
@@ -942,6 +1206,103 @@
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
+
+        /* Roadmap specific styles */
+        .pdf-container {
+            background-color: white !important;
+            color: black !important;
+        }
+
+        .pdf-container h2,
+        .pdf-container h3,
+        .pdf-container h4 {
+            color: black !important;
+        }
+
+        .pdf-container p,
+        .pdf-container li {
+            color: black !important;
+        }
+
+        /* Notification styles */
+        .notification {
+            z-index: 9999;
+        }
+
+        /* Roadmap modal improvements */
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Roadmap content spacing */
+        .roadmap-section {
+            margin-bottom: 2rem;
+        }
+
+        .roadmap-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Progress indicators */
+        .progress-step {
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 2px;
+            height: 20px;
+            background-color: #e5e7eb;
+            transform: translateX(-50%);
+        }
+
+        .progress-step.active::after {
+            background-color: #3b82f6;
+        }
+        
+        /* Enhanced roadmap timeline styles */
+        .timeline-item {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+        
+        .timeline-connector {
+            position: absolute;
+            left: 0.375rem;
+            top: 1.25rem;
+            width: 2px;
+            height: calc(100% - 1.25rem);
+            background-color: #10b981;
+        }
+        
+        /* Enhanced button styles */
+        .app-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .app-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .app-btn:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="font-roboto text-lg font-bold">
@@ -964,7 +1325,8 @@
                 <!-- User name will be displayed here -->
             </p>
             <button id="dark-mode-toggle" class="dark-mode-toggle text-xl px-4 py-2 rounded-full border border-gray-300 shadow-md">
-                <i class="fas fa-moon"></i>
+                <i class="fas fa-moon text-gray-800"></i>
+                <span class="icon-fallback"></span>
             </button>
         </div>
     </nav>
@@ -1089,11 +1451,11 @@
                 </div>
             </div>
             <div class="flex flex-col sm:flex-row justify-end mt-6 space-y-4 sm:space-y-0 sm:space-x-4">
-                <button id="download-pdf-btn" class="app-btn w-full sm:w-64 bg-white text-gray-600 transition-all duration-300 hover:scale-105">
-                    Download PDF ⬇️
+                <button id="download-pdf-btn" class="app-btn w-full sm:w-64 bg-white text-gray-600 transition-all duration-300 hover:scale-105 flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i><span class="icon-fallback"></span>Download PDF
                 </button>
-                <button id="close-modal-btn" class="app-btn w-full sm:w-64 text-white bg-[linear-gradient(120deg,#fda085_0%,#a1c4fd_100%)] transition-all duration-300 hover:scale-105">
-                    Close
+                <button id="close-modal-btn" class="app-btn w-full sm:w-64 text-white bg-[linear-gradient(120deg,#fda085_0%,#a1c4fd_100%)] transition-all duration-300 hover:scale-105 flex items-center justify-center">
+                    <i class="fas fa-times mr-2"></i><span class="icon-fallback"></span>Close
                 </button>
             </div>
         </div>
@@ -1102,20 +1464,22 @@
     <!-- Chatbot Bubble -->
     <div id="chatbot-container" class="chatbot-container">
         <button id="chatbot-toggle-btn" class="h-16 w-16 bg-[linear-gradient(120deg,#f6d365_0%,#fda085_100%)] rounded-full shadow-lg flex justify-center items-center text-white text-3xl transition-all transform hover:scale-110">
-            <i class="fa-solid fa-comments"></i>
+            <i class="fas fa-robot"></i>
+            <span class="icon-fallback"></span>
         </button>
         <div id="chatbot-bubble" class="chatbot-bubble hidden mt-4">
             <div class="p-4 bg-gray-800 text-white font-bold rounded-t-xl flex justify-between items-center transition-colors">
-                <span>Doubt Clearing Chatbot</span>
-                <button id="close-chat-btn" class="text-xl">&times;</button>
+                <span><i class="fas fa-robot mr-2"></i><span class="icon-fallback"></span> AI Career Assistant</span>
+                <button id="close-chat-btn" class="text-xl hover:text-red-400 transition-colors"><i class="fas fa-times"></i><span class="icon-fallback"></span></button>
             </div>
             <div id="chat-messages" class="chat-messages flex flex-col space-y-2">
                 <!-- Chat messages will appear here -->
             </div>
             <div id="chat-input-container" class="p-2 border-t border-gray-300 flex items-center transition-colors">
                 <input id="chat-input" type="text" placeholder="Ask a question..." class="flex-grow rounded-full px-4 py-2 border border-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 font-normal focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                <button id="chat-send-btn" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full">
-                    <i id="send-img" class="fa-solid fa-paper-plane"></i>
+                <button id="chat-send-btn" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+                    <i id="send-img" class="fas fa-paper-plane"></i>
+                    <span class="icon-fallback"></span>
                 </button>
             </div>
         </div>
@@ -1123,6 +1487,35 @@
 
     <!-- Link to external JavaScript file -->
     <script src="script.js"></script>
+    
+    <!-- Font Awesome detection script -->
+    <script>
+        // Check if Font Awesome is loaded after a short delay
+        setTimeout(() => {
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fas fa-moon';
+            testIcon.style.position = 'absolute';
+            testIcon.style.left = '-9999px';
+            testIcon.style.visibility = 'hidden';
+            document.body.appendChild(testIcon);
+            
+            // Check if the icon has content
+            const computedStyle = window.getComputedStyle(testIcon, ':before');
+            const hasContent = computedStyle.content !== 'none' && computedStyle.content !== '';
+            
+            document.body.removeChild(testIcon);
+            
+            if (!hasContent) {
+                // Font Awesome not loaded, show fallback icons
+                document.querySelectorAll('.icon-fallback').forEach(fallback => {
+                    fallback.style.display = 'inline-block';
+                });
+                console.log('Font Awesome not detected, showing fallback icons');
+            } else {
+                console.log('Font Awesome detected and working');
+            }
+        }, 2000);
+    </script>
 </body>
-</html>
 
+</html>
