@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
         nameInput: document.getElementById('name-input'),
         startJourneyBtn: document.getElementById('start-journey-btn'),
         userDisplayName: document.getElementById('user-display-name'),
+        userSection: document.getElementById('user-section'),
+        logoutBtn: document.getElementById('logout-btn'),
         button10th: document.getElementById('button-10th'),
         button12th: document.getElementById('button-12th'),
         startQuizBtn: document.getElementById('start-quiz-btn'),
@@ -1081,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', () => {
             state.userName = name;
             localStorage.setItem('userName', name);
             elements.userDisplayName.textContent = `Welcome, ${name}`;
-            elements.userDisplayName.classList.remove('hidden');
+            elements.userSection.classList.remove('hidden');
             showScreen('welcome1');
         } else {
             showNotification('Please enter your name to continue.', 'error');
@@ -1138,6 +1140,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     elements.darkModeToggle.addEventListener('click', toggleDarkMode);
 
+    // Logout functionality
+    elements.logoutBtn.addEventListener('click', () => {
+        // Clear user data
+        state.userName = '';
+        localStorage.removeItem('userName');
+        
+        // Hide user section
+        elements.userSection.classList.add('hidden');
+        
+        // Clear name input
+        elements.nameInput.value = '';
+        
+        // Show home screen
+        showScreen('home');
+        
+        // Show notification
+        showNotification('You have been logged out successfully.', 'success');
+    });
+
     // Keyboard navigation support
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -1164,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (state.userName) {
         elements.nameInput.value = state.userName;
         elements.userDisplayName.textContent = `Welcome, ${state.userName}`;
-        elements.userDisplayName.classList.remove('hidden');
+        elements.userSection.classList.remove('hidden');
         showScreen('welcome1');
     } else {
         showScreen('home');
