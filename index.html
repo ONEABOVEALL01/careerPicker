@@ -409,6 +409,8 @@
             font-size: 15px;
         }
 
+       
+
         /* Quiz question options for very small screens */
         .quiz-container button.app-btn,
         .quiz-container button[class*="w-full"] {
@@ -431,6 +433,16 @@
         width: 20px;
 
       }
+      /* Ensure home screen title stays in a single row on mobile */
+      #homeSCREEN{
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 10px;
+    }
+      #homeSCREEN span{ white-space: nowrap !important; }
       /* Navbar mobile alignment: username + icon-only logout in one row */
       #user-section{
         margin-top: 0 !important;
@@ -1507,7 +1519,7 @@
         <div class="quiz-container text-center transition-colors">
            
 
-            <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-row justify-center items-center transition-colors">
+            <h1 id="homeSCREEN" class="text-gray-900 font-bold text-4xl my-10 flex flex-row justify-center items-center transition-colors">
                 <span>Welcome to</span>
                 <span class="text-[rgba(77,68,255,0.862)] transition-colors mx-3">Career Picker</span>
             </h1>
