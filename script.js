@@ -238,92 +238,757 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('results');
     };
 
-    // Function to generate and display the roadmap using the Gemini API
+    // Function to generate and display the roadmap
     const generateRoadmap = async () => {
         elements.roadmapContent.innerHTML = ''; // Reset content
         elements.roadmapLoadingState.classList.remove('hidden');
         screens.roadmapModal.classList.remove('hidden');
         
-        const imagePrompt = `A professional and modern flowchart diagram for the career path of a "${state.finalResult}". The diagram should be clear, visually appealing, and have no text labels or words.`;
-        const textPrompt = `Generate a 2-3 page detailed and easy-to-understand career roadmap for a person interested in "${state.finalResult}". Use proper English and clear, concise language. The roadmap should include sections with clear headings and bullet points. The sections should be:
-        **Foundational Knowledge**: What subjects or skills to master first.
-        **Educational Path**: Specific degrees or courses to pursue.
-        **Key Skills to Develop**: Both technical and soft skills.
-        **Practical Experience**: Internships, projects, and volunteering.
-        **Long-Term Career Growth**: Possible roles and future outlook.
-        
-        Make sure the response is properly formatted with headings and bullet points.`;
-
         try {
-            // Fetch image for the roadmap
-            const imagePayload = { instances: { prompt: imagePrompt }, parameters: { "sampleCount": 1 } };
-            const imageApiKey = "AIzaSyCpD83zSZEqon2J_2GnsVcKQOIzvJ7DZko";
-            const imageApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${imageApiKey}`;
-            const imageResponse = await fetch(imageApiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(imagePayload)
-            });
+            // Generate roadmap content based on the career result
+            const roadmapContent = generateRoadmapContent(state.finalResult);
+            elements.roadmapContent.innerHTML = roadmapContent;
             
-            const textPayload = { contents: [{ parts: [{ text: textPrompt }] }] };
-            const textApiKey = "AIzaSyCpD83zSZEqon2J_2GnsVcKQOIzvJ7DZko";
-            const textApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${textApiKey}`;
-            const textResponse = await fetch(textApiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(textPayload)
-            });
-
-            const [imageResult, textResult] = await Promise.all([imageResponse.json(), textResponse.json()]);
-
-            let imageHtml = "";
-            let textHtml = "";
-
-            if (imageResult.predictions && imageResult.predictions.length > 0 && imageResult.predictions[0].bytesBase64Encoded) {
-                const imageUrl = `data:image/png;base64,${imageResult.predictions[0].bytesBase64Encoded}`;
-                imageHtml = `<img id="roadmap-image" class="w-full h-auto rounded-xl mb-6 shadow-lg" src="${imageUrl}" alt="AI-generated visual roadmap">`;
-            } else {
-                imageHtml = "<p class='text-center text-gray-700 dark:text-gray-300'>Sorry, I couldn't generate a visual roadmap at this time.</p>";
-            }
-
-            if (textResult.candidates && textResult.candidates.length > 0 &&
-                textResult.candidates[0].content && textResult.candidates[0].content.parts &&
-                textResult.candidates[0].content.parts.length > 0) {
-                const text = textResult.candidates[0].content.parts[0].text;
-                // Replace markdown bold/list with HTML tags
-                textHtml = text
-                    .replace(/\*\*(.*?)\*\*/g, '<h3 class="text-xl font-bold mt-4 mb-2">${1}</h3>')
-                    .replace(/^- (.*)/gm, '<li><p class="text-sm font-normal">${1}</p></li>');
-                
-                textHtml = textHtml.replace(/<h3>(.*?)<\/h3>\n\n<li>/g, '<h3>$1</h3><ul class="list-disc list-inside space-y-2 mt-2 mb-4"><li>');
-                textHtml = textHtml.replace(/<\/h3><li>/g, '<h3>$1</h3><ul class="list-disc list-inside space-y-2 mt-2 mb-4"><li>');
-                textHtml += '</ul>';
-
-            } else {
-                textHtml = "<p class='text-center text-gray-700 dark:text-gray-300'>Sorry, I couldn't generate the text roadmap at this time.</p>";
-            }
-
-            elements.roadmapContent.innerHTML = `<div class="pdf-container light-mode p-6 rounded-xl">${imageHtml}${textHtml}</div>`;
-
         } catch (error) {
-            console.error("API call failed:", error);
-            elements.roadmapContent.innerHTML = "<p class='text-center text-gray-700 dark:text-gray-300'>An error occurred while generating the roadmap. Please try again later.</p>";
+            console.error("Roadmap generation failed:", error);
+            elements.roadmapContent.innerHTML = `
+                <div class="text-center text-gray-700 dark:text-gray-300 p-6">
+                    <h3 class="text-xl font-bold mb-4">Your Career Roadmap</h3>
+                    <p>An error occurred while generating the roadmap. Here's a basic roadmap for your career path.</p>
+                    <div class="mt-6 text-left">
+                        ${generateBasicRoadmap(state.finalResult)}
+                    </div>
+                </div>
+            `;
         } finally {
             elements.roadmapLoadingState.classList.add('hidden');
         }
     };
+
+    // Function to generate roadmap content
+    const generateRoadmapContent = (careerPath) => {
+        const roadmapData = getRoadmapData(careerPath);
+        
+        return `
+            <div class="pdf-container bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-6 text-center text-gray-900">Your Career Roadmap: ${careerPath}</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-blue-800">🎯 Career Overview</h3>
+                        <p class="text-gray-700">${roadmapData.overview}</p>
+                    </div>
+                    
+                    ${roadmapData.detailedTimeline ? `
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800">📅 Detailed Timeline</h3>
+                        <div class="space-y-4">
+                            ${Object.entries(roadmapData.detailedTimeline).map(([year, yearData]) => `
+                                <div class="border-l-4 border-green-500 pl-4">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-3">${year}</h4>
+                                    ${typeof yearData === 'object' && !Array.isArray(yearData) ? 
+                                        Object.entries(yearData).map(([month, monthData]) => `
+                                            <div class="ml-4 mb-3">
+                                                <h5 class="font-semibold text-gray-700 mb-2">${month}</h5>
+                                                ${typeof monthData === 'object' && !Array.isArray(monthData) ?
+                                                    Object.entries(monthData).map(([week, weekTasks]) => `
+                                                        <div class="ml-4 mb-2">
+                                                            <h6 class="font-medium text-gray-600 mb-1">${week}</h6>
+                                                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                                                ${Array.isArray(weekTasks) ? weekTasks.map(task => `<li>${task}</li>`).join('') : `<li>${monthData}</li>`}
+                                                            </ul>
+                                                        </div>
+                                                    `).join('') :
+                                                    `<ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                                        ${Array.isArray(monthData) ? monthData.map(task => `<li>${task}</li>`).join('') : `<li>${monthData}</li>`}
+                                                    </ul>`
+                                                }
+                                            </div>
+                                        `).join('') :
+                                        `<ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                            ${Array.isArray(yearData) ? yearData.map(task => `<li>${task}</li>`).join('') : `<li>${yearData}</li>`}
+                                        </ul>`
+                                    }
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-green-800">📚 Educational Path</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            ${roadmapData.education.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-800">🛠️ Key Skills to Develop</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-2">Technical Skills:</h4>
+                                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                    ${roadmapData.technicalSkills.map(skill => `<li>${skill}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-2">Soft Skills:</h4>
+                                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                    ${roadmapData.softSkills.map(skill => `<li>${skill}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-purple-800">💼 Practical Experience</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            ${roadmapData.experience.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-red-800">🚀 Career Progression</h3>
+                        <div class="space-y-3">
+                            ${roadmapData.progression.map((stage, index) => `
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">${index + 1}</div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">${stage.title}</h4>
+                                        <p class="text-gray-700 text-sm">${stage.description}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">📈 Future Outlook</h3>
+                        <p class="text-gray-700">${roadmapData.futureOutlook}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
+    // Function to get roadmap data for different career paths
+    const getRoadmapData = (careerPath) => {
+        const roadmapData = {
+            'Software Engineer': {
+                overview: 'Software engineering is a dynamic field focused on designing, developing, and maintaining software applications. It offers excellent career growth and competitive salaries.',
+                detailedTimeline: {
+                    'Year 1': {
+                        'Months 1-3': {
+                            'Week 1-2': ['Research programming languages (Python, JavaScript)', 'Set up development environment', 'Complete online coding tutorials'],
+                            'Week 3-4': ['Learn basic HTML, CSS, and JavaScript', 'Build simple static websites', 'Join coding communities and forums'],
+                            'Week 5-8': ['Study data structures and algorithms', 'Practice coding problems on platforms like LeetCode', 'Start learning a backend language (Java/Python)'],
+                            'Week 9-12': ['Learn version control with Git', 'Contribute to open source projects', 'Build a portfolio website']
+                        },
+                        'Months 4-6': {
+                            'Week 13-16': ['Learn database concepts (SQL)', 'Build full-stack applications', 'Study software development methodologies'],
+                            'Week 17-20': ['Learn about APIs and web services', 'Practice building RESTful APIs', 'Study system design basics'],
+                            'Week 21-24': ['Learn about cloud platforms (AWS/Azure)', 'Deploy applications to cloud', 'Study DevOps practices']
+                        },
+                        'Months 7-9': {
+                            'Week 25-28': ['Learn about testing and quality assurance', 'Practice writing unit tests', 'Study software architecture patterns'],
+                            'Week 29-32': ['Learn about security best practices', 'Study authentication and authorization', 'Practice secure coding'],
+                            'Week 33-36': ['Build complex projects for portfolio', 'Participate in hackathons', 'Network with professionals in the field']
+                        },
+                        'Months 10-12': {
+                            'Week 37-40': ['Prepare for technical interviews', 'Practice coding interviews', 'Update resume and portfolio'],
+                            'Week 41-44': ['Apply for internships and entry-level positions', 'Attend career fairs and networking events', 'Study company-specific technologies'],
+                            'Week 45-48': ['Complete internship applications', 'Prepare for technical assessments', 'Build final portfolio projects']
+                        }
+                    },
+                    'Year 2': {
+                        'Months 1-3': ['Secure internship or entry-level position', 'Learn company-specific technologies', 'Contribute to team projects'],
+                        'Months 4-6': ['Take ownership of small features', 'Learn about code review processes', 'Study advanced programming concepts'],
+                        'Months 7-9': ['Mentor junior developers', 'Learn about project management', 'Study system design in depth'],
+                        'Months 10-12': ['Lead small projects', 'Learn about microservices architecture', 'Study cloud-native development']
+                    },
+                    'Year 3': {
+                        'Months 1-6': ['Specialize in specific technologies', 'Lead medium-sized projects', 'Mentor multiple junior developers'],
+                        'Months 7-12': ['Architect solutions for complex problems', 'Contribute to technical strategy', 'Study leadership and management']
+                    }
+                },
+                education: [
+                    'Complete 12th with Mathematics and Physics',
+                    'Pursue B.Tech/B.E. in Computer Science or related field',
+                    'Consider M.Tech for specialization in areas like AI, ML, or Cybersecurity',
+                    'Obtain relevant certifications (AWS, Azure, Google Cloud)'
+                ],
+                technicalSkills: [
+                    'Programming languages (Java, Python, JavaScript)',
+                    'Data structures and algorithms',
+                    'Database management systems',
+                    'Version control (Git)',
+                    'Cloud computing platforms'
+                ],
+                softSkills: [
+                    'Problem-solving and analytical thinking',
+                    'Team collaboration and communication',
+                    'Time management and project planning',
+                    'Continuous learning and adaptability',
+                    'Attention to detail'
+                ],
+                experience: [
+                    'Build personal projects and contribute to open source',
+                    'Complete internships at tech companies',
+                    'Participate in coding competitions and hackathons',
+                    'Join coding clubs and technical communities',
+                    'Create a strong portfolio showcasing your work'
+                ],
+                progression: [
+                    { title: 'Junior Developer (0-2 years)', description: 'Focus on learning technologies and contributing to team projects' },
+                    { title: 'Mid-level Developer (2-5 years)', description: 'Take ownership of features and mentor junior developers' },
+                    { title: 'Senior Developer (5-8 years)', description: 'Lead technical decisions and architecture design' },
+                    { title: 'Tech Lead/Architect (8+ years)', description: 'Drive technical strategy and mentor teams' }
+                ],
+                futureOutlook: 'The software engineering field is expected to grow significantly with the rise of AI, cloud computing, and digital transformation. Remote work opportunities and competitive salaries make it an attractive career choice.'
+            },
+            'Doctor': {
+                overview: 'Medicine is a noble profession dedicated to healing and helping others. It requires extensive education but offers immense job satisfaction and respect.',
+                detailedTimeline: {
+                    'Year 1 (Pre-Medical)': {
+                        'Months 1-3': {
+                            'Week 1-4': ['Focus on Biology, Chemistry, and Physics', 'Join NEET coaching classes', 'Start regular study schedule'],
+                            'Week 5-8': ['Practice NEET mock tests', 'Study NCERT textbooks thoroughly', 'Join study groups'],
+                            'Week 9-12': ['Take full-length practice tests', 'Focus on weak areas', 'Prepare for NEET exam']
+                        },
+                        'Months 4-6': ['Clear NEET UG exam', 'Apply for MBBS colleges', 'Prepare for medical school'],
+                        'Months 7-9': ['Complete admission formalities', 'Attend orientation programs', 'Start MBBS program'],
+                        'Months 10-12': ['Complete first semester of MBBS', 'Study anatomy and physiology', 'Participate in practical sessions']
+                    },
+                    'Year 2-3 (MBBS Foundation)': {
+                        'Months 1-6': ['Study basic medical sciences', 'Complete anatomy and physiology', 'Learn clinical skills'],
+                        'Months 7-12': ['Study pathology and pharmacology', 'Begin clinical rotations', 'Learn patient interaction skills']
+                    },
+                    'Year 4-5 (Clinical Years)': {
+                        'Months 1-12': ['Complete clinical rotations', 'Study medicine, surgery, pediatrics', 'Prepare for final MBBS exams'],
+                        'Months 13-18': ['Complete MBBS degree', 'Start internship program', 'Gain hands-on clinical experience']
+                    },
+                    'Year 6 (Internship)': {
+                        'Months 1-6': ['Complete mandatory internship', 'Work in various departments', 'Prepare for PG entrance exams'],
+                        'Months 7-12': ['Apply for PG courses', 'Take NEET PG exam', 'Choose specialization']
+                    }
+                },
+                education: [
+                    'Complete 12th with Biology, Chemistry, and Physics',
+                    'Clear NEET UG for MBBS admission',
+                    'Complete 5.5 years of MBBS program',
+                    'Complete 1 year of internship',
+                    'Pursue specialization through PG courses (MD/MS)'
+                ],
+                technicalSkills: [
+                    'Medical diagnosis and treatment',
+                    'Patient care and management',
+                    'Medical procedures and surgeries',
+                    'Use of medical equipment',
+                    'Medical research and analysis'
+                ],
+                softSkills: [
+                    'Empathy and patient communication',
+                    'Critical thinking and decision making',
+                    'Stress management and emotional resilience',
+                    'Leadership and teamwork',
+                    'Ethical judgment and integrity'
+                ],
+                experience: [
+                    'Complete mandatory internship during MBBS',
+                    'Participate in medical camps and community service',
+                    'Join medical associations and attend conferences',
+                    'Publish research papers and case studies',
+                    'Gain experience in different medical specialties'
+                ],
+                progression: [
+                    { title: 'Medical Student (5.5 years)', description: 'Complete MBBS with theoretical and practical training' },
+                    { title: 'Intern (1 year)', description: 'Gain hands-on experience in various departments' },
+                    { title: 'Resident Doctor (3-5 years)', description: 'Specialize in chosen field through PG program' },
+                    { title: 'Consultant/Specialist (5+ years)', description: 'Practice independently and mentor junior doctors' }
+                ],
+                futureOutlook: 'Healthcare is a growing sector with increasing demand for qualified doctors. Specializations in emerging fields like telemedicine, AI in healthcare, and preventive medicine offer new opportunities.'
+            },
+            'Business Manager': {
+                overview: 'Business management involves leading organizations, making strategic decisions, and driving growth. It\'s a versatile career with opportunities across industries.',
+                detailedTimeline: {
+                    'Year 1 (Foundation)': {
+                        'Months 1-3': {
+                            'Week 1-4': ['Research business programs and colleges', 'Prepare for entrance exams', 'Build basic business knowledge'],
+                            'Week 5-8': ['Apply for BBA/B.Com programs', 'Study business fundamentals', 'Join business clubs and organizations'],
+                            'Week 9-12': ['Start BBA/B.Com program', 'Study accounting and economics', 'Participate in business competitions']
+                        },
+                        'Months 4-6': ['Study marketing and management principles', 'Learn about business operations', 'Join student business organizations'],
+                        'Months 7-9': ['Study finance and business law', 'Participate in case study competitions', 'Build professional network'],
+                        'Months 10-12': ['Complete first year of business program', 'Apply for summer internships', 'Study strategic management']
+                    },
+                    'Year 2 (Specialization)': {
+                        'Months 1-6': ['Choose business specialization', 'Study advanced business concepts', 'Complete summer internship'],
+                        'Months 7-12': ['Study international business', 'Learn about digital transformation', 'Prepare for final year projects']
+                    },
+                    'Year 3 (Advanced)': {
+                        'Months 1-6': ['Complete capstone projects', 'Study leadership and ethics', 'Apply for MBA programs'],
+                        'Months 7-12': ['Graduate with business degree', 'Start entry-level business role', 'Prepare for MBA entrance exams']
+                    }
+                },
+                education: [
+                    'Complete 12th in any stream',
+                    'Pursue BBA or B.Com for business foundation',
+                    'Consider MBA for advanced management roles',
+                    'Obtain industry-specific certifications',
+                    'Attend leadership development programs'
+                ],
+                technicalSkills: [
+                    'Strategic planning and analysis',
+                    'Financial management and budgeting',
+                    'Project management methodologies',
+                    'Data analysis and business intelligence',
+                    'Digital marketing and e-commerce'
+                ],
+                softSkills: [
+                    'Leadership and team management',
+                    'Communication and negotiation',
+                    'Problem-solving and decision making',
+                    'Adaptability and change management',
+                    'Networking and relationship building'
+                ],
+                experience: [
+                    'Start with entry-level business roles',
+                    'Take on project management responsibilities',
+                    'Participate in business competitions and case studies',
+                    'Join professional business associations',
+                    'Build a network of industry contacts'
+                ],
+                progression: [
+                    { title: 'Business Analyst (0-2 years)', description: 'Analyze business processes and recommend improvements' },
+                    { title: 'Team Lead (2-4 years)', description: 'Manage small teams and oversee projects' },
+                    { title: 'Manager (4-7 years)', description: 'Lead departments and implement strategies' },
+                    { title: 'Senior Manager/Director (7+ years)', description: 'Drive organizational growth and mentor leaders' }
+                ],
+                futureOutlook: 'Business management roles are evolving with digital transformation. Skills in data analytics, digital marketing, and sustainable business practices are becoming increasingly important.'
+            },
+            'Data Scientist': {
+                overview: 'Data science combines statistics, programming, and domain expertise to extract insights from data. It\'s a high-demand field with excellent career prospects.',
+                detailedTimeline: {
+                    'Year 1 (Foundation)': {
+                        'Months 1-3': {
+                            'Week 1-4': ['Learn Python programming basics', 'Study mathematics and statistics', 'Set up data science environment'],
+                            'Week 5-8': ['Learn data manipulation with Pandas', 'Study probability and statistics', 'Practice with real datasets'],
+                            'Week 9-12': ['Learn data visualization with Matplotlib/Seaborn', 'Study SQL for data querying', 'Complete first data analysis project']
+                        },
+                        'Months 4-6': ['Learn machine learning basics', 'Study linear algebra and calculus', 'Practice with Kaggle datasets'],
+                        'Months 7-9': ['Learn advanced ML algorithms', 'Study deep learning fundamentals', 'Build predictive models'],
+                        'Months 10-12': ['Learn big data technologies', 'Study data engineering concepts', 'Complete comprehensive data science project']
+                    },
+                    'Year 2 (Specialization)': {
+                        'Months 1-6': ['Specialize in specific domains (NLP, Computer Vision)', 'Learn advanced statistical methods', 'Complete internships'],
+                        'Months 7-12': ['Study MLOps and deployment', 'Learn cloud platforms for ML', 'Build production-ready models']
+                    },
+                    'Year 3 (Advanced)': {
+                        'Months 1-6': ['Lead data science projects', 'Mentor junior data scientists', 'Contribute to research papers'],
+                        'Months 7-12': ['Architect data science solutions', 'Drive data strategy', 'Lead data science teams']
+                    }
+                },
+                education: [
+                    'Complete 12th with Mathematics and Statistics',
+                    'Pursue B.Sc. in Data Science or Statistics',
+                    'Consider M.Sc. in Data Science or related field',
+                    'Obtain certifications in Python, R, and SQL',
+                    'Learn machine learning and AI concepts'
+                ],
+                technicalSkills: [
+                    'Programming languages (Python, R, SQL)',
+                    'Statistical analysis and modeling',
+                    'Machine learning algorithms',
+                    'Data visualization tools',
+                    'Big data technologies (Hadoop, Spark)'
+                ],
+                softSkills: [
+                    'Analytical thinking and problem-solving',
+                    'Communication of complex findings',
+                    'Curiosity and continuous learning',
+                    'Attention to detail and accuracy',
+                    'Collaboration with cross-functional teams'
+                ],
+                experience: [
+                    'Work on personal data analysis projects',
+                    'Participate in Kaggle competitions',
+                    'Complete internships at data-driven companies',
+                    'Contribute to open-source data science projects',
+                    'Build a portfolio showcasing your analyses'
+                ],
+                progression: [
+                    { title: 'Data Analyst (0-2 years)', description: 'Focus on data cleaning, analysis, and basic modeling' },
+                    { title: 'Junior Data Scientist (2-4 years)', description: 'Develop machine learning models and advanced analytics' },
+                    { title: 'Senior Data Scientist (4-7 years)', description: 'Lead complex projects and mentor junior team members' },
+                    { title: 'Lead Data Scientist (7+ years)', description: 'Drive data strategy and innovation initiatives' }
+                ],
+                futureOutlook: 'Data science is rapidly growing with the increasing importance of data-driven decision making. AI and machine learning are creating new opportunities in this field.'
+            },
+            'Graphic Designer': {
+                overview: 'Graphic design combines creativity with technical skills to create visual communications. It\'s a versatile career with opportunities in various industries.',
+                detailedTimeline: {
+                    'Year 1 (Foundation)': {
+                        'Months 1-3': {
+                            'Week 1-4': ['Learn design principles and theory', 'Study color theory and typography', 'Practice sketching and drawing'],
+                            'Week 5-8': ['Learn Adobe Photoshop basics', 'Study layout and composition', 'Create simple design projects'],
+                            'Week 9-12': ['Learn Adobe Illustrator', 'Study branding and logo design', 'Build initial portfolio pieces']
+                        },
+                        'Months 4-6': ['Learn Adobe InDesign', 'Study print design principles', 'Create print materials (brochures, posters)'],
+                        'Months 7-9': ['Learn digital design principles', 'Study web design basics', 'Create digital assets and graphics'],
+                        'Months 10-12': ['Learn about design trends', 'Study user experience principles', 'Complete comprehensive design project']
+                    },
+                    'Year 2 (Specialization)': {
+                        'Months 1-6': ['Specialize in specific design areas', 'Learn advanced software techniques', 'Build professional portfolio'],
+                        'Months 7-12': ['Learn about design business', 'Study client communication', 'Start freelance work']
+                    },
+                    'Year 3 (Professional)': {
+                        'Months 1-6': ['Work on real client projects', 'Build strong portfolio', 'Network with design professionals'],
+                        'Months 7-12': ['Establish design business', 'Mentor junior designers', 'Lead design projects']
+                    }
+                },
+                education: [
+                    'Complete 12th in any stream',
+                    'Pursue B.Des in Graphic Design or BFA',
+                    'Learn industry-standard software (Adobe Creative Suite)',
+                    'Build a strong portfolio of work',
+                    'Consider specialized courses in UI/UX design'
+                ],
+                technicalSkills: [
+                    'Adobe Creative Suite (Photoshop, Illustrator, InDesign)',
+                    'Typography and layout design',
+                    'Color theory and visual hierarchy',
+                    'Digital illustration and photo editing',
+                    'Print and digital design principles'
+                ],
+                softSkills: [
+                    'Creativity and artistic vision',
+                    'Client communication and feedback handling',
+                    'Time management and project planning',
+                    'Attention to detail and quality control',
+                    'Adaptability to different design styles'
+                ],
+                experience: [
+                    'Create personal design projects and portfolio',
+                    'Take on freelance design work',
+                    'Intern at design agencies or companies',
+                    'Participate in design competitions',
+                    'Build an online presence and network'
+                ],
+                progression: [
+                    { title: 'Junior Designer (0-2 years)', description: 'Learn design principles and build technical skills' },
+                    { title: 'Mid-level Designer (2-5 years)', description: 'Handle diverse projects and develop unique style' },
+                    { title: 'Senior Designer (5-8 years)', description: 'Lead design projects and mentor junior designers' },
+                    { title: 'Art Director (8+ years)', description: 'Oversee creative direction and design strategy' }
+                ],
+                futureOutlook: 'Graphic design is evolving with digital transformation. Skills in UI/UX design, motion graphics, and digital marketing are becoming increasingly valuable.'
+            },
+            'Web Developer': {
+                overview: 'Web development involves creating websites and web applications. It\'s a dynamic field with constant technological advancements and excellent career opportunities.',
+                detailedTimeline: {
+                    'Year 1 (Foundation)': {
+                        'Months 1-3': {
+                            'Week 1-4': ['Learn HTML and CSS fundamentals', 'Study responsive design principles', 'Build simple static websites'],
+                            'Week 5-8': ['Learn JavaScript basics', 'Study DOM manipulation', 'Create interactive web elements'],
+                            'Week 9-12': ['Learn a frontend framework (React/Vue)', 'Study modern CSS (Flexbox, Grid)', 'Build portfolio projects']
+                        },
+                        'Months 4-6': ['Learn backend development (Node.js/Python)', 'Study database design and SQL', 'Build full-stack applications'],
+                        'Months 7-9': ['Learn about APIs and web services', 'Study version control with Git', 'Deploy applications to cloud platforms'],
+                        'Months 10-12': ['Learn about web security', 'Study performance optimization', 'Build production-ready applications']
+                    },
+                    'Year 2 (Specialization)': {
+                        'Months 1-6': ['Specialize in frontend or backend', 'Learn advanced frameworks and tools', 'Work on real client projects'],
+                        'Months 7-12': ['Learn DevOps and CI/CD', 'Study advanced web technologies', 'Build scalable applications']
+                    },
+                    'Year 3 (Advanced)': {
+                        'Months 1-6': ['Lead web development projects', 'Mentor junior developers', 'Contribute to open source'],
+                        'Months 7-12': ['Architect web solutions', 'Drive technical decisions', 'Lead development teams']
+                    }
+                },
+                education: [
+                    'Complete 12th in any stream',
+                    'Learn web development through online courses',
+                    'Build a strong portfolio of projects',
+                    'Consider formal education in Computer Science',
+                    'Obtain relevant certifications'
+                ],
+                technicalSkills: [
+                    'HTML, CSS, and JavaScript',
+                    'Frontend frameworks (React, Vue, Angular)',
+                    'Backend technologies (Node.js, Python, PHP)',
+                    'Database management (SQL, NoSQL)',
+                    'Version control and deployment'
+                ],
+                softSkills: [
+                    'Problem-solving and debugging',
+                    'Attention to detail and quality',
+                    'Client communication and feedback',
+                    'Time management and project planning',
+                    'Continuous learning and adaptation'
+                ],
+                experience: [
+                    'Build personal projects and portfolio',
+                    'Contribute to open source projects',
+                    'Complete freelance web development work',
+                    'Participate in web development communities',
+                    'Create responsive and accessible websites'
+                ],
+                progression: [
+                    { title: 'Junior Web Developer (0-2 years)', description: 'Focus on learning technologies and building basic websites' },
+                    { title: 'Mid-level Developer (2-5 years)', description: 'Handle complex projects and mentor junior developers' },
+                    { title: 'Senior Developer (5-8 years)', description: 'Lead technical decisions and architecture design' },
+                    { title: 'Lead Developer/Architect (8+ years)', description: 'Drive technical strategy and mentor teams' }
+                ],
+                futureOutlook: 'Web development continues to grow with the increasing importance of online presence. Skills in modern frameworks, mobile-first design, and progressive web apps are highly valued.'
+            },
+            'Digital Marketer': {
+                overview: 'Digital marketing involves promoting products and services through digital channels. It\'s a data-driven field with excellent growth potential.',
+                detailedTimeline: {
+                    'Year 1 (Foundation)': {
+                        'Months 1-3': {
+                            'Week 1-4': ['Learn digital marketing fundamentals', 'Study consumer behavior', 'Understand marketing channels'],
+                            'Week 5-8': ['Learn SEO and content marketing', 'Study keyword research and optimization', 'Create content strategies'],
+                            'Week 9-12': ['Learn social media marketing', 'Study platform-specific strategies', 'Build social media presence']
+                        },
+                        'Months 4-6': ['Learn paid advertising (Google Ads, Facebook Ads)', 'Study campaign management', 'Practice with small budgets'],
+                        'Months 7-9': ['Learn email marketing and automation', 'Study analytics and reporting', 'Build email campaigns'],
+                        'Months 10-12': ['Learn marketing analytics tools', 'Study conversion optimization', 'Complete comprehensive marketing projects']
+                    },
+                    'Year 2 (Specialization)': {
+                        'Months 1-6': ['Specialize in specific channels', 'Learn advanced analytics', 'Work on real client campaigns'],
+                        'Months 7-12': ['Learn marketing automation', 'Study advanced strategies', 'Build marketing systems']
+                    },
+                    'Year 3 (Advanced)': {
+                        'Months 1-6': ['Lead marketing campaigns', 'Mentor junior marketers', 'Develop marketing strategies'],
+                        'Months 7-12': ['Drive marketing innovation', 'Lead marketing teams', 'Develop brand strategies']
+                    }
+                },
+                education: [
+                    'Complete 12th in any stream',
+                    'Learn digital marketing through online courses',
+                    'Obtain relevant certifications (Google, Facebook, HubSpot)',
+                    'Build practical experience through projects',
+                    'Stay updated with industry trends'
+                ],
+                technicalSkills: [
+                    'SEO and content marketing',
+                    'Social media marketing',
+                    'Paid advertising (PPC)',
+                    'Email marketing and automation',
+                    'Analytics and reporting tools'
+                ],
+                softSkills: [
+                    'Creativity and content creation',
+                    'Data analysis and interpretation',
+                    'Client communication and relationship building',
+                    'Strategic thinking and planning',
+                    'Adaptability to changing trends'
+                ],
+                experience: [
+                    'Create and manage social media accounts',
+                    'Run small advertising campaigns',
+                    'Build email marketing lists',
+                    'Create content for various platforms',
+                    'Analyze and optimize marketing performance'
+                ],
+                progression: [
+                    { title: 'Digital Marketing Assistant (0-2 years)', description: 'Learn tools and execute basic campaigns' },
+                    { title: 'Digital Marketing Specialist (2-5 years)', description: 'Manage campaigns and analyze performance' },
+                    { title: 'Digital Marketing Manager (5-8 years)', description: 'Lead marketing strategies and teams' },
+                    { title: 'Marketing Director (8+ years)', description: 'Drive overall marketing strategy and innovation' }
+                ],
+                futureOutlook: 'Digital marketing is rapidly evolving with AI, automation, and new platforms. Skills in data analysis, automation, and emerging technologies are becoming increasingly important.'
+            }
+        };
+
+        // Return default data if specific career not found
+        return roadmapData[careerPath] || {
+            overview: `A career in ${careerPath} offers exciting opportunities for growth and development. Focus on building relevant skills and gaining practical experience.`,
+            detailedTimeline: {
+                'Year 1 (Foundation)': {
+                    'Months 1-3': {
+                        'Week 1-4': ['Research the career field thoroughly', 'Identify required skills and qualifications', 'Set up learning environment'],
+                        'Week 5-8': ['Start learning basic skills', 'Join relevant communities and forums', 'Create a study plan'],
+                        'Week 9-12': ['Begin formal education or training', 'Practice basic skills', 'Network with professionals']
+                    },
+                    'Months 4-6': ['Build foundational knowledge', 'Complete initial projects', 'Gain basic experience'],
+                    'Months 7-9': ['Develop intermediate skills', 'Work on practical projects', 'Build professional network'],
+                    'Months 10-12': ['Complete foundational training', 'Prepare for next level', 'Apply for entry-level positions']
+                },
+                'Year 2 (Development)': {
+                    'Months 1-6': ['Secure entry-level position', 'Learn industry-specific tools', 'Develop specialized skills'],
+                    'Months 7-12': ['Take on more responsibilities', 'Mentor junior professionals', 'Continue learning and growing']
+                },
+                'Year 3 (Advancement)': {
+                    'Months 1-6': ['Lead projects and teams', 'Develop leadership skills', 'Contribute to industry knowledge'],
+                    'Months 7-12': ['Establish expertise in the field', 'Mentor others', 'Drive innovation and growth']
+                }
+            },
+            education: [
+                'Complete your current education level',
+                'Research specific degree requirements for your field',
+                'Consider both formal education and certifications',
+                'Stay updated with industry trends and requirements'
+            ],
+            technicalSkills: [
+                'Industry-specific technical knowledge',
+                'Relevant software and tools',
+                'Data analysis and research skills',
+                'Project management abilities',
+                'Quality assurance and testing'
+            ],
+            softSkills: [
+                'Communication and interpersonal skills',
+                'Problem-solving and critical thinking',
+                'Leadership and teamwork',
+                'Adaptability and continuous learning',
+                'Time management and organization'
+            ],
+            experience: [
+                'Seek internships and entry-level positions',
+                'Build a portfolio of relevant projects',
+                'Join professional associations and networks',
+                'Attend industry conferences and workshops',
+                'Volunteer for relevant causes and organizations'
+            ],
+            progression: [
+                { title: 'Entry Level (0-2 years)', description: 'Learn the basics and gain foundational experience' },
+                { title: 'Mid Level (2-5 years)', description: 'Take on more responsibilities and specialize' },
+                { title: 'Senior Level (5-8 years)', description: 'Lead projects and mentor junior professionals' },
+                { title: 'Expert Level (8+ years)', description: 'Drive innovation and strategic decisions' }
+            ],
+            futureOutlook: 'Most career fields are evolving with technology and changing market demands. Continuous learning and adaptability are key to long-term success.'
+        };
+    };
+
+    // Function to generate basic roadmap as fallback
+    const generateBasicRoadmap = (careerPath) => {
+        return `
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-semibold text-gray-800">Educational Path:</h4>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>Complete your current education level</li>
+                        <li>Research degree requirements for ${careerPath}</li>
+                        <li>Consider relevant certifications</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800">Skills to Develop:</h4>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>Technical skills relevant to your field</li>
+                        <li>Communication and leadership abilities</li>
+                        <li>Problem-solving and analytical thinking</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800">Experience:</h4>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>Seek internships and entry-level positions</li>
+                        <li>Build a portfolio of relevant projects</li>
+                        <li>Network with professionals in your field</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    };
     
     // Function to download the roadmap as a PDF
     const downloadPdf = () => {
-        const roadmapContent = elements.roadmapContent;
-        const options = {
-            margin: 10,
-            filename: `${state.finalResult}_Roadmap.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().from(roadmapContent).set(options).save();
+        try {
+            const roadmapContent = elements.roadmapContent;
+            if (!roadmapContent || roadmapContent.innerHTML.trim() === '') {
+                showNotification('Please generate a roadmap first before downloading.', 'error');
+                return;
+            }
+
+            const options = {
+                margin: 10,
+                filename: `${state.finalResult.replace(/[^a-zA-Z0-9]/g, '_')}_Roadmap.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                }
+            };
+
+            // Show loading indicator
+            const downloadBtn = elements.downloadPdfBtn;
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+            downloadBtn.disabled = true;
+
+            html2pdf()
+                .from(roadmapContent)
+                .set(options)
+                .save()
+                .then(() => {
+                    // Show success message
+                    showNotification('PDF downloaded successfully!', 'success');
+                })
+                .catch((error) => {
+                    console.error('PDF generation error:', error);
+                    showNotification('Failed to generate PDF. Please try again.', 'error');
+                })
+                .finally(() => {
+                    // Restore button
+                    downloadBtn.innerHTML = originalText;
+                    downloadBtn.disabled = false;
+                });
+
+        } catch (error) {
+            console.error('PDF download error:', error);
+            showNotification('An error occurred while downloading the PDF.', 'error');
+        }
+    };
+
+    // Notification system
+    const showNotification = (message, type = 'info') => {
+        // Remove existing notifications
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+        
+        const notification = document.createElement('div');
+        notification.className = `notification fixed top-24 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-full`;
+        
+        const bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500';
+        const icon = type === 'error' ? 'fas fa-exclamation-circle' : type === 'success' ? 'fas fa-check-circle' : 'fas fa-info-circle';
+        
+        notification.innerHTML = `
+            <div class="flex items-center ${bgColor} text-white">
+                <i class="${icon} mr-2"></i>
+                <span>${message}</span>
+                <button class="ml-auto text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, 5000);
     };
 
     // Chatbot functions
@@ -392,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('dark-mode');
         const isDarkMode = document.body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDarkMode);
-        elements.darkModeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun text-yellow-300"></i>' : '<i class="fas fa-moon text-gray-800"></i>';
+        elements.darkModeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun text-yellow-300"></i><span class="icon-fallback"></span>' : '<i class="fas fa-moon text-gray-800"></i><span class="icon-fallback"></span>';
     };
 
     // Event Listeners
@@ -405,7 +1070,8 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.userDisplayName.classList.remove('hidden');
             showScreen('welcome1');
         } else {
-            alert('Please enter your name to continue.');
+            showNotification('Please enter your name to continue.', 'error');
+            elements.nameInput.focus();
         }
     });
 
@@ -458,13 +1124,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     elements.darkModeToggle.addEventListener('click', toggleDarkMode);
 
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            // Close modal if open
+            if (!screens.roadmapModal.classList.contains('hidden')) {
+                screens.roadmapModal.classList.add('hidden');
+            }
+            // Close chatbot if open
+            if (!elements.chatbotBubble.classList.contains('hidden')) {
+                elements.chatbotBubble.classList.add('hidden');
+            }
+        }
+    });
+
     // Initial state check
     const savedDarkMode = localStorage.getItem('darkMode');
     if (savedDarkMode === 'true') {
         document.body.classList.add('dark-mode');
-        elements.darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300"></i>';
+        elements.darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300"></i><span class="icon-fallback"></span>';
     } else {
-        elements.darkModeToggle.innerHTML = '<i class="fas fa-moon text-gray-800"></i>';
+        elements.darkModeToggle.innerHTML = '<i class="fas fa-moon text-gray-800"></i><span class="icon-fallback"></span>';
     }
 
     if (state.userName) {
