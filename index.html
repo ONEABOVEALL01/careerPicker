@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#dc2626">
+            <meta name="theme-color" content="rgba(77,68,255,0.862)">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Career & Interest Finder</title>
@@ -34,8 +34,8 @@
             --button-text-dark: #e5e7eb;
             --button-border-light: rgba(0, 0, 0, 0.2);
             --button-border-dark: rgba(255, 255, 255, 0.2);
-            --primary-text-color-light: #dc2626;
-            --primary-text-color-dark: #f87171;
+            --primary-text-color-light: rgba(77,68,255,0.862);
+            --primary-text-color-dark: rgba(77,68,255,0.862);
             --box-shadow-light: 0 10px 30px rgba(0, 0, 0, 0.1);
             --box-shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.5);
             --navbar-bg-light: rgba(255, 255, 255, 0.5);
@@ -75,7 +75,7 @@
         .dark-mode .navbar-bg {
             background-color: var(--navbar-bg-dark);
         }
-        .dark-mode .text-red-500 { color: #f87171; }
+        .dark-mode .text-red-500 { color: rgba(77,68,255,0.862); }
         .dark-mode .text-gray-900 { color: var(--text-color-dark); }
         .dark-mode .text-gray-800 { color: var(--text-color-dark); }
         .dark-mode .text-gray-700 { color: #d1d5db; }
@@ -105,11 +105,20 @@
         .app-btn:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            color: #dc2626; /* Hover text color */
+            color: rgba(77,68,255,0.862); /* Hover text color */
+        }
+
+        /* Specific hover style for roadmap button */
+        #roadMap-btn:hover {
+            color: black !important;
         }
 
         .dark-mode .app-btn:hover {
-            color: #f87171;
+            color: rgba(77,68,255,0.862);
+        }
+
+        .dark-mode #roadMap-btn:hover {
+            color: black !important;
         }
 
         /* Custom animations */
@@ -368,6 +377,14 @@
         #question-text{
 
             font-size: 15px;
+        }
+
+        /* Quiz question options for very small screens */
+        .quiz-container button.app-btn,
+        .quiz-container button[class*="w-full"] {
+            font-size: 0.8rem !important;
+            padding: 0.5rem 0.75rem !important;
+            line-height: 1.2 !important;
         }
 
       #chat-send-btn{
@@ -652,6 +669,14 @@
                 font-size: 0.875rem !important;
                 line-height: 1.3 !important;
             }
+
+            /* Quiz question options for very small screens */
+            .quiz-container button.app-btn,
+            .quiz-container button[class*="w-full"] {
+                font-size: 0.75rem !important;
+                padding: 0.4rem 0.6rem !important;
+                line-height: 1.1 !important;
+            }
             
             /* Degrees and exams text for very small screens */
             #degrees-container h3 {
@@ -669,23 +694,39 @@
             
             /* Roadmap text for very small screens */
             .roadmap-section h3 {
-                font-size: 1.125rem !important;
-            }
-            
-            .roadmap-section h4 {
                 font-size: 1rem !important;
             }
             
-            .roadmap-section p {
-                font-size: 0.8rem !important;
-            }
-            
-            .timeline-item h4 {
+            .roadmap-section h4 {
                 font-size: 0.875rem !important;
             }
             
-            .timeline-item p {
+            .roadmap-section p {
+                font-size: 0.7rem !important;
+            }
+            
+            .timeline-item h4 {
                 font-size: 0.75rem !important;
+            }
+            
+            .timeline-item p {
+                font-size: 0.65rem !important;
+            }
+            
+            /* Roadmap mobile x-axis expansion */
+            .roadmap-section {
+                padding: 0 0.5rem !important;
+                margin: 0 0.25rem !important;
+            }
+            
+            .timeline-item {
+                padding-left: 1rem !important;
+                margin-right: 0.5rem !important;
+            }
+            
+            .modal-content {
+                padding: 1rem !important;
+                margin: 0.5rem !important;
             }
             
             /* AI chatbot adjustments for very small screens */
@@ -830,6 +871,14 @@
                 font-size: 1rem !important;
                 line-height: 1.4 !important;
             }
+
+            /* Quiz question options for medium mobile screens */
+            .quiz-container button.app-btn,
+            .quiz-container button[class*="w-full"] {
+                font-size: 0.85rem !important;
+                padding: 0.6rem 0.8rem !important;
+                line-height: 1.3 !important;
+            }
             
             .app-btn {
                 font-size: 0.875rem !important;
@@ -853,23 +902,39 @@
             
             /* Roadmap text */
             .roadmap-section h3 {
-                font-size: 1.25rem !important;
-            }
-            
-            .roadmap-section h4 {
                 font-size: 1.125rem !important;
             }
             
-            .roadmap-section p {
-                font-size: 0.875rem !important;
-            }
-            
-            .timeline-item h4 {
+            .roadmap-section h4 {
                 font-size: 1rem !important;
             }
             
-            .timeline-item p {
+            .roadmap-section p {
                 font-size: 0.8rem !important;
+            }
+            
+            .timeline-item h4 {
+                font-size: 0.875rem !important;
+            }
+            
+            .timeline-item p {
+                font-size: 0.75rem !important;
+            }
+            
+            /* Roadmap mobile x-axis expansion */
+            .roadmap-section {
+                padding: 0 0.75rem !important;
+                margin: 0 0.5rem !important;
+            }
+            
+            .timeline-item {
+                padding-left: 1.25rem !important;
+                margin-right: 0.75rem !important;
+            }
+            
+            .modal-content {
+                padding: 1.5rem !important;
+                margin: 0.75rem !important;
             }
             
             /* Top career picker logo text */
@@ -997,14 +1062,14 @@
         /* Progress bar styling */
         #progress-bar {
             height: 8px;
-            background: linear-gradient(90deg, #dc2626 0%, #f87171 100%);
+            background: linear-gradient(90deg, rgba(77,68,255,0.862) 0%, rgba(77,68,255,0.6) 100%);
             width: 0%;
             border-radius: 1rem;
             transition: width 0.5s ease-in-out;
         }
 
         .dark-mode #progress-bar {
-            background: linear-gradient(90deg, #e74c3c 0%, #f87171 100%);
+            background: linear-gradient(90deg, rgba(77,68,255,0.862) 0%, rgba(77,68,255,0.6) 100%);
         }
 
         /* Chatbot styling */
@@ -1303,6 +1368,39 @@
         .app-btn:active {
             transform: translateY(0);
         }
+        
+        /* Quiz option mobile click effects */
+        .quiz-container button:active {
+            transform: scale(0.95) !important;
+            background-color: #dbeafe !important;
+        }
+        
+        /* Mobile roadmap improvements */
+        @media (max-width: 768px) {
+            .modal-content {
+                max-width: 95vw !important;
+                width: 95vw !important;
+                margin: 2.5vw !important;
+            }
+            
+            .roadmap-section {
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+            
+            .timeline-item {
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .modal-content {
+                max-width: 98vw !important;
+                width: 98vw !important;
+                margin: 1vw !important;
+            }
+        }
     </style>
 </head>
 <body class="font-roboto text-lg font-bold">
@@ -1342,13 +1440,13 @@
         <div class="quiz-container text-center transition-colors">
             <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-col justify-center items-center transition-colors">
                 <span>Welcome to</span>
-                <span class="text-red-500 mt-2 transition-colors">Career Picker</span>
+                <span class="text-[rgba(77,68,255,0.862)] mt-2 transition-colors">Career Picker</span>
             </h1>
             <p class="font-semibold text-base sm:text-lg text-gray-700 mt-8 px-4 sm:px-24 transition-colors">
                 Please enter your name to begin your journey.
             </p>
             <div class="flex flex-col justify-center items-center mt-10 space-y-4">
-                <input id="name-input" type="text" placeholder="Enter your name" class="h-12 w-full sm:w-80 px-4 rounded-full border border-gray-300 text-gray-900 dark:text-white bg-white dark:bg-gray-800 font-normal focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+                <input id="name-input" type="text" placeholder="Enter your name" class="h-12 w-full sm:w-80 px-4 rounded-full border border-gray-300 text-gray-900 dark:text-white bg-white dark:bg-gray-800 font-normal focus:outline-none focus:ring-2 focus:ring-[rgba(77,68,255,0.862)] transition-all">
                 <button id="start-journey-btn" class="app-btn w-full sm:w-64 text-gray-600 bg-white">
                     Start Your Journey
                 </button>
@@ -1363,7 +1461,7 @@
                 <div class="yo1 flex">
                 
                 <span>Select Your</span>  
-                <span class="text-red-500 transition-colors mx-3">Qualification</span>
+                <span class="text-[rgba(77,68,255,0.862)] transition-colors mx-3">Qualification</span>
                   </div>
             </h1>
             <div class="flex flex-col sm:flex-row mt-10 sm:mt-20 justify-evenly items-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -1384,7 +1482,7 @@
                
                 <div>
                
-                <span>Find Your</span>  <span class="text-red-500 transition-colors">Interest</span>
+                <span>Find Your</span>  <span class="text-[rgba(77,68,255,0.862)] transition-colors">Interest</span>
                 </div>
             </h1>
             <p class="font-semibold text-base sm:text-lg text-gray-700 mt-8 px-4 sm:px-24 transition-colors">
@@ -1416,7 +1514,7 @@
         <div class="quiz-container transition-colors">
             <h2 class="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 animate-fade-in-down text-center mt-10 transition-colors">Your Career Match</h2>
             <div class="bg-white p-6 rounded-2xl shadow-md mb-6 mx-5 text-center transition-colors">
-                <h3 id="result-title" class="text-2xl font-bold mb-2 text-red-500 transition-colors"></h3>
+                <h3 id="result-title" class="text-2xl font-bold mb-2 text-[rgba(77,68,255,0.862)] transition-colors"></h3>
                 <p id="result-description" class="font-semibold text-gray-600 transition-colors"></p>
             </div>
             <div id="degrees-container" class="bg-white p-6 rounded-2xl shadow-md mx-5 mt-6 hidden transition-colors">
@@ -1470,7 +1568,7 @@
         <div id="chatbot-bubble" class="chatbot-bubble hidden mt-4">
             <div class="p-4 bg-gray-800 text-white font-bold rounded-t-xl flex justify-between items-center transition-colors">
                 <span><i class="fas fa-robot mr-2"></i><span class="icon-fallback"></span> AI Career Assistant</span>
-                <button id="close-chat-btn" class="text-xl hover:text-red-400 transition-colors"><i class="fas fa-times"></i><span class="icon-fallback"></span></button>
+                <button id="close-chat-btn" class="text-xl hover:text-[rgba(77,68,255,0.862)] transition-colors"><i class="fas fa-times"></i><span class="icon-fallback"></span></button>
             </div>
             <div id="chat-messages" class="chat-messages flex flex-col space-y-2">
                 <!-- Chat messages will appear here -->
