@@ -169,7 +169,21 @@ document.addEventListener('DOMContentLoaded', () => {
             currentQuestion.options.forEach(option => {
                 const button = document.createElement('button');
                 button.textContent = option.text;
-                button.classList.add('w-full', 'px-6', 'py-4', 'bg-white', 'text-gray-600', 'font-semibold', 'rounded-full', 'border', 'border-gray-300', 'shadow-md', 'hover:bg-blue-50', 'transition-all', 'transform', 'hover:scale-105', 'hover:text-red-500');
+                button.classList.add('w-full', 'px-6', 'py-4', 'bg-white', 'text-gray-600', 'font-semibold', 'rounded-full', 'border', 'border-gray-300', 'shadow-md', 'hover:bg-blue-50', 'transition-all', 'transform', 'hover:scale-105', 'hover:text-[rgba(77,68,255,0.862)]', 'active:scale-95', 'active:bg-blue-100', 'focus:outline-none', 'focus:ring-2', 'focus:ring-[rgba(77,68,255,0.862)]', 'focus:ring-opacity-50');
+                
+                // Add mobile-specific click effects
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                    this.style.backgroundColor = '#dbeafe';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.backgroundColor = '';
+                    }, 150);
+                });
+                
                 button.onclick = () => selectAnswer(option);
                 elements.optionsContainer.appendChild(button);
             });
@@ -213,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (degrees && degrees.length > 0) {
                 degrees.forEach(degree => {
                     const examsListHtml = degree.exams && degree.exams.length > 0 ?
-                        degree.exams.map(exam => `<li class="ml-4 text-red-400">${exam}</li>`).join('') :
+                        degree.exams.map(exam => `<li class="ml-4 text-sky-400">${exam}</li>`).join('') :
                         '<li class="ml-4">No specific exams listed.</li>';
 
                     const degreeItem = document.createElement('div');
@@ -347,12 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
                     
-                    <div class="bg-red-50 p-4 rounded-lg">
-                        <h3 class="text-xl font-bold mb-3 text-red-800">🚀 Career Progression</h3>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-[rgba(77,68,255,0.862)]">🚀 Career Progression</h3>
                         <div class="space-y-3">
                             ${roadmapData.progression.map((stage, index) => `
                                 <div class="flex items-start space-x-3">
-                                    <div class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">${index + 1}</div>
+                                    <div class="bg-[rgba(77,68,255,0.862)] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">${index + 1}</div>
                                     <div>
                                         <h4 class="font-semibold text-gray-800">${stage.title}</h4>
                                         <p class="text-gray-700 text-sm">${stage.description}</p>
