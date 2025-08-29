@@ -296,20 +296,26 @@
                 font-size: small;
             }
                          #user-display-name{
-                 font-size: smaller;
+                            margin-top: 7px;
+                            
+                 font-size: 13px;
              }
-             
-             #user-section {
-                 space-y: 0.5;
+             #user-section{
+                margin-top: 3px;
              }
              
              #logout-btn {
-                 font-size: 0.75rem !important;
-                 padding: 0.25rem 0.5rem !important;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                 font-size: 0.45rem !important;
+                 padding: 0 !important;
+                width: 60px;
+                margin-bottom: 10px;
              }
             
             nav h1 {
-                font-size: 10px !important;
+                font-size: 7px !important;
             }
             
             #dark-mode-toggle {
@@ -425,6 +431,36 @@
         width: 20px;
 
       }
+      /* Navbar mobile alignment: username + icon-only logout in one row */
+      #user-section{
+        margin-top: 0 !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+      }
+      #user-display-name{
+        margin-top: 0 !important;
+        max-width: 48vw !important;
+        font-size: 0.7rem !important;
+        line-height: 1.2 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      #logout-btn{
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 20px !important;
+        height: 15px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-radius: 9999px !important;
+      }
+      /* Hide text labels, keep only the icon */
+      #logout-btn span{ display: none !important; }
+      #logout-btn i{ font-size: 0.6rem !important; }
     }
         /* Tablet devices (401px - 768px) */
         @media (min-width: 401px) and (max-width: 768px) {
@@ -1443,11 +1479,11 @@
             <h1 class="font-bold text-4xl text-[rgba(77,68,255,0.862)] ml-1 transition-colors">Picker</h1>
         </div>
         <div class="flex items-center space-x-4">
-            <div id="user-section" class="flex flex-col items-center space-y-2 hidden">
+            <div id="user-section" class="flex flex-col items-center space-y-2  hidden">
                 <p id="user-display-name" class="text-xl font-bold text-gray-700 transition-colors">
                     <!-- User name will be displayed here -->
                 </p>
-                <button id="logout-btn" class="text-sm px-3 py-1 rounded-full border border-gray-300 bg-white text-gray-600 transition-all duration-300 flex items-center space-x-1">
+                <button id="logout-btn" class="text-sm px-3 py-1  rounded-full border border-gray-300 bg-white text-gray-600 transition-all duration-300 flex items-center space-x-1">
                     <i class="fas fa-sign-out-alt"></i>
                     <span class="icon-fallback"></span>
                     <span>Logout</span>
@@ -1469,10 +1505,14 @@
     <!-- Home Screen (Login) -->
     <div id="home-screen" class="flex justify-center items-center my-12 animate-fade-in w-full">
         <div class="quiz-container text-center transition-colors">
-            <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-col justify-center items-center transition-colors">
+           
+
+            <h1 class="text-gray-900 font-bold text-4xl sm:text-5xl my-10 flex flex-row justify-center items-center transition-colors">
                 <span>Welcome to</span>
-                <span class="text-[rgba(77,68,255,0.862)] mt-2 transition-colors">Career Picker</span>
+                <span class="text-[rgba(77,68,255,0.862)] transition-colors mx-3">Career Picker</span>
             </h1>
+
+            
             <p class="font-semibold text-base sm:text-lg text-gray-700 mt-8 px-4 sm:px-24 transition-colors">
                 Please enter your name to begin your journey.
             </p>
@@ -1545,7 +1585,7 @@
         <div class="quiz-container transition-colors">
             <h2 class="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 animate-fade-in-down text-center mt-10 transition-colors">Your Career Match</h2>
             <div class="bg-white p-6 rounded-2xl shadow-md mb-6 mx-5 text-center transition-colors">
-                <h3 id="result-title" class="text-2xl font-bold mb-2 text-[rgba(77,68,255,0.862)] transition-colors"></h3>
+                <h3 id="result-title" class="text-3xl font-bold mb-2 text-[rgba(77,68,255,0.862)] transition-colors"></h3>
                 <p id="result-description" class="font-semibold text-gray-600 transition-colors"></p>
             </div>
             <div id="degrees-container" class="bg-white p-6 rounded-2xl shadow-md mx-5 mt-6 hidden transition-colors">
