@@ -1,7 +1,7 @@
 // All JavaScript logic for the quiz and roadmap generation
 document.addEventListener('DOMContentLoaded', () => {
     // State management
-    let state = {
+    window.state = {
         currentScreen: 'home-screen',
         quizType: null, // '10th' or '12th'
         currentQuestionIndex: 0,
@@ -14,38 +14,144 @@ document.addEventListener('DOMContentLoaded', () => {
     // (Removed duplicate declarations of screens and elements)
 
     // Quiz questions and results based on qualification
-    const questions = {
+    window.questions = {
         '10th': [
-            { question: "Which subject do you enjoy studying the most?", options: [{ text: "Mathematics & Science", score: { Science: 1 } }, { text: "Social Studies & History", score: { Arts: 1 } }, { text: "Economics & Finance", score: { Commerce: 1 } }, { text: "Creative Arts & Literature", score: { Arts: 1 } },] },
-            { question: "What kind of projects do you prefer working on?", options: [{ text: "Building models or experiments", score: { Science: 1 } }, { text: "Writing essays or stories", score: { Arts: 1 } }, { text: "Managing a budget for a school event", score: { Commerce: 1 } }, { text: "Researching historical events", score: { Arts: 1 } },] },
-            { question: "When faced with a complex problem, what do you do?", options: [{ text: "Analyze data and find a logical solution", score: { Science: 1 } }, { text: "Brainstorm creative and unique ideas", score: { Arts: 1 } }, { text: "Calculate the costs and benefits of different options", score: { Commerce: 1 } }, { text: "Discuss and debate with others", score: { Arts: 1 } },] },
-            { question: "Which extracurricular activity interests you?", options: [{ text: "Science or Robotics Club", score: { Science: 1 } }, { text: "Debate or Drama Club", score: { Arts: 1 } }, { text: "Chess or Investment Club", score: { Commerce: 1 } }, { text: "Creative Writing or Art Club", score: { Arts: 1 } },] },
-            { question: "What kind of news headlines catch your attention?", options: [{ text: "Breakthroughs in technology or medicine", score: { Science: 1 } }, { text: "Government policy changes or global events", score: { Commerce: 1 } }, { text: "New discoveries in history or culture", score: { Arts: 1 } }, { text: "Innovations in business or finance", score: { Commerce: 1 } },] },
-            { question: "You have a free afternoon. What would you do?", options: [{ text: "Work on a puzzle or a coding project", score: { Science: 1 } }, { text: "Read a classic novel or visit a museum", score: { Arts: 1 } }, { text: "Organize and track your savings", score: { Commerce: 1 } }, { text: "Listen to music or draw/paint", score: { Arts: 1 } },] },
-            { question: "How do you prefer to learn?", options: [{ text: "Through hands-on experiments and labs", score: { Science: 1 } }, { text: "By reading and discussing complex texts", score: { Arts: 1 } }, { text: "By analyzing case studies and business models", score: { Commerce: 1 } }, { text: "By creating presentations or skits", score: { Arts: 1 } },] },
-            { question: "What kind of movies do you enjoy the most?", options: [{ text: "Sci-Fi or documentaries about space", score: { Science: 1 } }, { text: "Historical dramas or biopics", score: { Arts: 1 } }, { text: "Financial thrillers or legal dramas", score: { Commerce: 1 } }, { text: "Artistic films or animated movies", score: { Arts: 1 } },] },
-            { question: "What is your main priority for the future?", options: [{ text: "Innovation and discovery", score: { Science: 1 } }, { text: "Contributing to society and culture", score: { Arts: 1 } }, { text: "Financial stability and growth", score: { Commerce: 1 } }, { text: "Understanding people and their stories", score: { Arts: 1 } },] },
-            { question: "Which of these is most appealing?", options: [{ text: "Solving equations and formulas", score: { Science: 1 } }, { text: "Debating a social issue", score: { Arts: 1 } }, { text: "Creating a business plan", score: { Commerce: 1 } }, { text: "Writing a short story", score: { Arts: 1 } },] }
+            { question: "Which broad stream best matches your natural interests?", options: [
+                { text: "Science: Maths, experiments, how things work", score: { Science: 1 } },
+                { text: "Commerce: Money, business, markets", score: { Commerce: 1 } },
+                { text: "Arts/Humanities: People, culture, society", score: { Arts: 1 } },
+                { text: "Creative Arts: Music, design, languages", score: { Arts: 1 } },
+            ] },
+            { question: "What kind of problems do you enjoy solving most?", options: [
+                { text: "Numerical or logical puzzles", score: { Science: 1 } },
+                { text: "Business or real‑world money scenarios", score: { Commerce: 1 } },
+                { text: "Social issues and human behavior", score: { Arts: 1 } },
+                { text: "Creative expression and storytelling", score: { Arts: 1 } },
+            ] },
+            { question: "Which class feels most rewarding when you do well?", options: [
+                { text: "Maths/Science labs", score: { Science: 1 } },
+                { text: "Accounts/Economics", score: { Commerce: 1 } },
+                { text: "History/Political Science", score: { Arts: 1 } },
+                { text: "Languages/Art/Music", score: { Arts: 1 } },
+            ] },
+            { question: "Pick an after‑school activity you'd love:", options: [
+                { text: "Build a small robot or science project", score: { Science: 1 } },
+                { text: "Run a small market stall or budget a trip", score: { Commerce: 1 } },
+                { text: "Join debate or social awareness club", score: { Arts: 1 } },
+                { text: "Create art, poetry, or short films", score: { Arts: 1 } },
+            ] },
+            { question: "Which news headline makes you click?", options: [
+                { text: "Big breakthrough in space/medicine", score: { Science: 1 } },
+                { text: "Stock market/economy trends", score: { Commerce: 1 } },
+                { text: "Culture, society, government", score: { Arts: 1 } },
+                { text: "Art, literature, performances", score: { Arts: 1 } },
+            ] },
+            { question: "How do you like learning new things?", options: [
+                { text: "Hands‑on experiments and logic", score: { Science: 1 } },
+                { text: "Case studies and business stories", score: { Commerce: 1 } },
+                { text: "Reading, discussion, perspectives", score: { Arts: 1 } },
+                { text: "Practice creative crafts and media", score: { Arts: 1 } },
+            ] },
+            { question: "Pick a dream project:", options: [
+                { text: "Design an eco‑friendly gadget", score: { Science: 1 } },
+                { text: "Launch a teen business", score: { Commerce: 1 } },
+                { text: "Make a short documentary", score: { Arts: 1 } },
+                { text: "Publish a poetry/art zine", score: { Arts: 1 } },
+            ] },
+            { question: "What motivates you most?", options: [
+                { text: "Solving tough logical challenges", score: { Science: 1 } },
+                { text: "Creating value and wealth", score: { Commerce: 1 } },
+                { text: "Impacting society and people", score: { Arts: 1 } },
+                { text: "Expressing ideas creatively", score: { Arts: 1 } },
+            ] },
+            { question: "Choose your ideal workplace:", options: [
+                { text: "Lab/research center", score: { Science: 1 } },
+                { text: "Office/startup", score: { Commerce: 1 } },
+                { text: "NGO/library/museum", score: { Arts: 1 } },
+                { text: "Studio/theatre", score: { Arts: 1 } },
+            ] },
+            { question: "Where do you want to grow most?", options: [
+                { text: "STEM depth (Maths/Physics/Chemistry)", score: { Science: 1 } },
+                { text: "Business/Finance/Entrepreneurship", score: { Commerce: 1 } },
+                { text: "Humanities/Social Sciences", score: { Arts: 1 } },
+                { text: "Creative Arts/Communication", score: { Arts: 1 } },
+            ] },
         ],
         '12th': [
-            { question: "When you hear 'technology', what career field sounds most interesting?", options: [{ text: "Creating and building software", score: { SoftwareEngineer: 1, WebDeveloper: 1, MobileDeveloper: 1, AIEngineer: 1 } }, { text: "Designing user experiences for products", score: { UXUIDesigner: 1, GraphicDesigner: 1 } }, { text: "Managing data and networks", score: { DataScientist: 1, NetworkAdministrator: 1, CyberSecurityAnalyst: 1 } }, { text: "Developing video games", score: { GameDeveloper: 1, Animator: 1 } }] },
-            { question: "Which business role do you find most appealing?", options: [{ text: "Leading a team and making key decisions", score: { BusinessManager: 1, Entrepreneur: 1, HRManager: 1 } }, { text: "Analyzing financial data and giving advice", score: { FinancialAnalyst: 1, Accountant: 1, InvestmentBanker: 1 } }, { text: "Creating marketing campaigns and engaging customers", score: { MarketingManager: 1, DigitalMarketer: 1 } }, { text: "Handling legal matters and contracts", score: { CorporateLawyer: 1, LegalConsultant: 1 } }] },
-            { question: "What kind of creative work would you like to do?", options: [{ text: "Writing stories, scripts, or articles", score: { ContentWriter: 1, Journalist: 1, Scriptwriter: 1 } }, { text: "Creating visual art, photos, or designs", score: { GraphicDesigner: 1, Photographer: 1, Architect: 1 } }, { text: "Directing or producing films", score: { Filmmaker: 1, Animator: 1 } }, { text: "Performing on stage or screen", score: { Actor: 1, Musician: 1 } }] },
-            { question: "Which aspect of healthcare appeals to you?", options: [{ text: "Directly helping and caring for patients", score: { Doctor: 1, Nurse: 1, Dentist: 1, PhysicalTherapist: 1 } }, { text: "Conducting research to find new cures", score: { MedicalResearcher: 1, Biotechnologist: 1 } }, { text: "Working with data to improve public health", score: { Epidemiologist: 1, HealthDataAnalyst: 1 } }, { text: "Providing mental health support", score: { Psychologist: 1, Counselor: 1 } }] },
-            { question: "What's your ideal way to help people?", options: [{ text: "Designing a safer bridge or building", score: { CivilEngineer: 1, Architect: 1 } }, { text: "Educating others and sharing knowledge", score: { Teacher: 1, Professor: 1 } }, { text: "Protecting a city or country", score: { PoliceOfficer: 1, MilitaryOfficer: 1 } }, { text: "Providing legal guidance", score: { Lawyer: 1, LegalConsultant: 1 } }] },
-            { question: "Which of these is most aligned with your interests?", options: [{ text: "Solving equations and scientific puzzles", score: { SoftwareEngineer: 1, DataScientist: 1, AIEngineer: 1, Biotechnologist: 1 } }, { text: "Expressing ideas through art and writing", score: { GraphicDesigner: 1, ContentWriter: 1, Filmmaker: 1, Journalist: 1 } }, { text: "Understanding financial markets and investments", score: { FinancialAnalyst: 1, Accountant: 1, InvestmentBanker: 1 } }, { text: "Caring for people and improving their well-being", score: { Doctor: 1, Nurse: 1, Psychologist: 1, PhysicalTherapist: 1 } }] },
-            { question: "Which industry are you most curious about?", options: [{ text: "Creating the next big tech gadget", score: { WebDeveloper: 1, MobileDeveloper: 1, AIEngineer: 1 } }, { text: "Managing a global brand", score: { MarketingManager: 1, BusinessManager: 1 } }, { text: "Working with patients and saving lives", score: { Doctor: 1, Nurse: 1, PhysicalTherapist: 1 } }, { text: "Exploring the world of finance", score: { FinancialAnalyst: 1, InvestmentBanker: 1 } }] },
-            { question: "How do you prefer to spend your free time?", options: [{ text: "Learning a new programming language", score: { SoftwareEngineer: 1, WebDeveloper: 1, MobileDeveloper: 1 } }, { text: "Reading about business trends", score: { Entrepreneur: 1, BusinessManager: 1 } }, { text: "Sketching, drawing, or painting", score: { GraphicDesigner: 1, Architect: 1, Animator: 1 } }, { text: "Watching documentaries about the human body", score: { Doctor: 1, MedicalResearcher: 1, PhysicalTherapist: 1 } }] },
-            { question: "Which of these careers requires skills you'd like to develop?", options: [{ text: "Developing a new gaming platform", score: { GameDeveloper: 1 } }, { text: "Leading a team in a corporate setting", score: { HRManager: 1 } }, { text: "Designing homes and large buildings", score: { Architect: 1 } }, { text: "Protecting a company's data from hackers", score: { CyberSecurityAnalyst: 1 } }] },
-            { question: "What sounds like a rewarding day at work?", options: [{ text: "Launching a flawless new application", score: { SoftwareEngineer: 1 } }, { text: "Signing a major business deal", score: { BusinessManager: 1 } }, { text: "Getting a positive review for your artistic work", score: { ContentWriter: 1 } }, { text: "Successfully treating a patient", score: { Doctor: 1 } }] }
+            { question: "What kind of work feels most like you?", options: [
+                { text: "Managing people, brands, or money", score: { BusinessManager: 1, MarketingManager: 1, SalesManager: 1, RetailManager: 1, SupplyChainManager: 1, RealEstateAgent: 1 } },
+                { text: "Helping people learn or feel better", score: { Teacher: 1, Counselor: 1, SocialWorker: 1, FitnessTrainer: 1, Nutritionist: 1 } },
+                { text: "Creating content, design, or performances", score: { ContentWriter: 1, Journalist: 1, GraphicDesigner: 1, Filmmaker: 1, FashionDesigner: 1, InteriorDesigner: 1, EventPlanner: 1 } },
+                { text: "Organizing experiences, travel, or hospitality", score: { HospitalityManager: 1, TourismManager: 1, TravelAgent: 1, HotelManager: 1, EventPlanner: 1 } },
+            ] },
+            { question: "Pick a typical day you'd enjoy:", options: [
+                { text: "Plan campaigns, analyze numbers, close deals", score: { MarketingManager: 1, FinancialAnalyst: 1, SalesManager: 1 } },
+                { text: "Guide students/clients with empathy", score: { Teacher: 1, Counselor: 1, SocialWorker: 1 } },
+                { text: "Design visuals, write, shoot/edit videos", score: { GraphicDesigner: 1, ContentWriter: 1, Filmmaker: 1 } },
+                { text: "Coordinate events or guest experiences", score: { EventPlanner: 1, HospitalityManager: 1, HotelManager: 1 } },
+            ] },
+            { question: "Which environment suits you best?", options: [
+                { text: "Fast‑moving office with targets", score: { BusinessManager: 1, SalesManager: 1, RetailManager: 1 } },
+                { text: "School/clinic/community center", score: { Teacher: 1, Counselor: 1, SocialWorker: 1 } },
+                { text: "Studio/creative room/on‑location shoots", score: { GraphicDesigner: 1, Filmmaker: 1, Photographer: 1 } },
+                { text: "Hotel/airport/tour desk", score: { HospitalityManager: 1, TourismManager: 1, TravelAgent: 1, FlightAttendant: 1 } },
+            ] },
+            { question: "Choose a challenge you'd love to solve:", options: [
+                { text: "Grow a brand's sales in 3 months", score: { MarketingManager: 1, SalesManager: 1, DigitalMarketer: 1 } },
+                { text: "Support someone through a tough time", score: { Counselor: 1, SocialWorker: 1, Psychologist: 1 } },
+                { text: "Design a stunning small space", score: { InteriorDesigner: 1, Architect: 1 } },
+                { text: "Plan a 500‑guest flawless wedding", score: { EventPlanner: 1, HospitalityManager: 1 } },
+            ] },
+            { question: "What are you most curious to study next?", options: [
+                { text: "Branding, finance, operations", score: { BusinessManager: 1, FinancialAnalyst: 1, SupplyChainManager: 1 } },
+                { text: "Psychology, education, public policy", score: { Teacher: 1, Counselor: 1, SocialWorker: 1 } },
+                { text: "Communication, design, media", score: { ContentWriter: 1, Journalist: 1, GraphicDesigner: 1, Filmmaker: 1, PRSpecialist: 1 } },
+                { text: "Hospitality, travel, events", score: { HospitalityManager: 1, TourismManager: 1, EventPlanner: 1, TravelAgent: 1 } },
+            ] },
+            { question: "Which impact sounds best to you?", options: [
+                { text: "Grow businesses and economies", score: { BusinessManager: 1, Entrepreneur: 1, SalesManager: 1 } },
+                { text: "Improve lives and communities", score: { SocialWorker: 1, Counselor: 1, Teacher: 1 } },
+                { text: "Inspire with art and stories", score: { Filmmaker: 1, ContentWriter: 1, Journalist: 1, GraphicDesigner: 1, Actor: 1, Musician: 1 } },
+                { text: "Create memorable experiences", score: { EventPlanner: 1, HospitalityManager: 1, TourismManager: 1 } },
+            ] },
+            { question: "Pick a side hustle you'd happily start:", options: [
+                { text: "Online store/real‑estate leads", score: { Entrepreneur: 1, RealEstateAgent: 1 } },
+                { text: "Tutoring/counseling sessions", score: { Teacher: 1, Counselor: 1 } },
+                { text: "YouTube/photography/design gigs", score: { Filmmaker: 1, Photographer: 1, GraphicDesigner: 1 } },
+                { text: "Event coordination/travel planning", score: { EventPlanner: 1, TravelAgent: 1 } },
+            ] },
+            { question: "What energizes you during work?", options: [
+                { text: "Targets, negotiations, incentives", score: { SalesManager: 1, RetailManager: 1, BusinessManager: 1 } },
+                { text: "Helping individuals directly", score: { SocialWorker: 1, Counselor: 1, FitnessTrainer: 1 } },
+                { text: "Crafting beautiful outputs", score: { InteriorDesigner: 1, FashionDesigner: 1, Filmmaker: 1, GraphicDesigner: 1 } },
+                { text: "Shaping experiences and journeys", score: { TourismManager: 1, HospitalityManager: 1, EventPlanner: 1 } },
+            ] },
+            { question: "Which setting sounds exciting?", options: [
+                { text: "Retail floor/head office", score: { RetailManager: 1, SupplyChainManager: 1 } },
+                { text: "Community NGO/campus", score: { SocialWorker: 1, Teacher: 1 } },
+                { text: "Runway/studio/editorial room", score: { FashionDesigner: 1, PRSpecialist: 1, ContentWriter: 1 } },
+                { text: "Airport/hotel/convention center", score: { FlightAttendant: 1, HospitalityManager: 1, EventPlanner: 1 } },
+            ] },
+            { question: "Pick a tool of the trade:", options: [
+                { text: "Spreadsheets and dashboards", score: { FinancialAnalyst: 1, SupplyChainManager: 1 } },
+                { text: "Lesson plans and counseling notes", score: { Teacher: 1, Counselor: 1 } },
+                { text: "Camera, sketchbook, editing apps", score: { Photographer: 1, GraphicDesigner: 1, Filmmaker: 1 } },
+                { text: "Itineraries, booking systems, CRMs", score: { TravelAgent: 1, HospitalityManager: 1, SalesManager: 1 } },
+            ] },
+            { question: "How do you define success?", options: [
+                { text: "Business growth and income", score: { BusinessManager: 1, SalesManager: 1, RealEstateAgent: 1 } },
+                { text: "Lives changed for the better", score: { SocialWorker: 1, Counselor: 1, Teacher: 1 } },
+                { text: "Art that moves people", score: { Filmmaker: 1, ContentWriter: 1, GraphicDesigner: 1 } },
+                { text: "Happy guests and seamless events", score: { HospitalityManager: 1, EventPlanner: 1, TourismManager: 1 } },
+            ] },
         ]
     };
 
-    const resultsData = {
+    window.resultsData = {
         '10th': {
-            Science: { title: "Science Stream", description: "Your answers suggest a strong inclination towards logic, problem-solving, and a curiosity about how the world works. The Science stream is a great choice, opening doors to careers in engineering, medicine, and research.", degrees: [] },
-            Arts: { title: "Arts Stream", description: "Your responses show a flair for creativity, communication, and a deep interest in human culture and history. The Arts stream will allow you to explore subjects like literature, history, and social sciences, leading to careers in media, law, and design.", degrees: [] },
-            Commerce: { title: "Commerce Stream", description: "Your interests align with business, finance, and economics. You are analytical and have a knack for strategic thinking. The Commerce stream is perfect for a future in business, accounting, banking, or management.", degrees: [] },
+            Science: { title: "Science Stream", category: "Science", description: "Your answers suggest a strong inclination towards logic, problem‑solving, and curiosity about how the world works.", degrees: [] },
+            Arts: { title: "Arts Stream", category: "Arts & Humanities", description: "You show a flair for creativity, communication, and interest in culture and society.", degrees: [] },
+            Commerce: { title: "Commerce Stream", category: "Business & Commerce", description: "You align with business, finance, and economics with strategic thinking.", degrees: [] },
         },
         '12th': {
             SoftwareEngineer: { title: "Software Engineer", description: "You have a knack for logical thinking and problem-solving, making you a great fit for a career in software engineering. You enjoy building things and seeing them work.", degrees: [{ name: "B.Tech/B.E. in Computer Science", desc: "A foundational engineering degree focusing on software development.", exams: ["JEE Main", "JEE Advanced", "BITSAT"] }, { name: "B.Sc. in Computer Science", desc: "A science degree with a strong theoretical and practical focus on computing.", exams: ["CUET", "NEST", "IISER Aptitude Test"] }, { name: "BCA (Bachelor of Computer Applications)", desc: "A practical degree focused on computer applications and software.", exams: ["IPU CET", "NIMCET", "SET"] }] },
@@ -57,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             DataScientist: { title: "Data Scientist", description: "You are a numbers person who loves to analyze data to uncover insights. This career is perfect for those who are curious and detail-oriented.", degrees: [{ name: "B.Sc. in Data Science or Statistics", desc: "A direct and relevant undergraduate degree.", exams: ["CUET", "NEST", "IISER Aptitude Test"] }, { name: "B.Tech in Computer Science", desc: "An engineering degree that provides a strong technical foundation.", exams: ["JEE Main", "JEE Advanced", "BITSAT"] }, { name: "M.Sc. in Data Science (after graduation)", desc: "A common path for specialization in this field.", exams: ["GATE", "CUET-PG"] }] },
             NetworkAdministrator: { title: "Network Administrator", description: "You have a strong interest in managing and maintaining computer networks. You are a problem-solver who enjoys ensuring systems run smoothly.", degrees: [{ name: "B.Tech/B.E. in Computer Science or IT", desc: "A standard engineering degree that covers networking basics.", exams: ["JEE Main", "JEE Advanced", "BITSAT"] }, { name: "B.Sc. in Networking", desc: "A specialized degree focused on network infrastructure and security.", exams: ["CUET", "university-specific exams"] }, { name: "Cisco Certified Network Associate (CCNA)", desc: "A professional certification that is highly valued in this field.", exams: ["No specific entrance exams, certification based admission"] }] },
             CyberSecurityAnalyst: { title: "Cybersecurity Analyst", description: "You are passionate about protecting systems and data from cyber threats. This is a crucial and in-demand role in today's digital world.", degrees: [{ name: "B.E./B.Tech. in Cybersecurity", desc: "A specialized engineering degree for a career in cybersecurity.", exams: ["JEE Main", "JEE Advanced", "BITSAT"] }, { name: "B.Sc. in Information Security", desc: "A technical degree focused on information security and ethical hacking.", exams: ["CUET", "university-specific exams"] }, { name: "Certified Ethical Hacker (CEH)", desc: "A professional certification that demonstrates your skills to employers.", exams: ["No specific entrance exams, certification based admission"] }] },
-            GameDeveloper: { title: "Game Developer", description: "You are passionate about creating games. You enjoy combining coding, art, and storytelling to create interactive experiences.", degrees: [{ name: "B.Sc. in Game Development", desc: "A specialized degree in game design and programming.", exams: ["NIFT Entrance Exam", "UCEED"] }, { name: "B.Tech/B.E. in Computer Science", desc: "A great technical foundation for a career in game development.", exams: ["JEE Main", "JEE Advanced", "BITSAT"] }, { name: "B.Des (Bachelor of Design)", desc: "A degree focused on the artistic side of game design and concept art.", exams: ["NIFT Entrance Exam", "NID DAT", "UCEED"] }] },
+            GameDeveloper: { title: "Game Developer", description: "You are passionate about creating games. You enjoy combining coding, art, and storytelling to create interactive experiences.", degrees: [{ name: "B.Sc. in Game Development", desc: "A specialized degree in game design and programming.", exams: ["NIFT Entrance Exam", "UCEED"] }, { name: "B.Tech/B.E. in Computer Science", desc: "A great technical foundation for a career in game development.", exams: ["JEE Main", "JEE Advanced", "BITSAT"] }, { name: "B.Des (Bachelor of Design)", desc: "A design degree with a focus on the artistic side of game design and concept art.", exams: ["NIFT Entrance Exam", "NID DAT", "UCEED"] }] },
             Animator: { title: "Animator", description: "You love bringing characters and objects to life through animation. This is a creative career in film, television, or video games.", degrees: [{ name: "B.F.A. in Animation", desc: "A fine arts degree focused on traditional and digital animation.", exams: ["CUET", "university-specific exams"] }, { name: "B.Des (Bachelor of Design)", desc: "A design degree with a focus on animation and visual effects.", exams: ["NIFT Entrance Exam", "NID DAT", "UCEED"] }, { name: "Diploma in Animation", desc: "A short-term course to build a portfolio and get a job quickly.", exams: ["No specific entrance exams, portfolio based admission"] }] },
             BusinessManager: { title: "Business Manager", description: "You have a flair for leadership and strategic thinking. You enjoy managing teams and making decisions to help a business grow.", degrees: [{ name: "BBA (Bachelor of Business Administration)", desc: "A foundational degree for a career in business management.", exams: ["CET", "SET", "IPMAT"] }, { name: "B.Com (Bachelor of Commerce)", desc: "A common degree for a career in business and finance.", exams: ["CUET", "university-specific exams"] }, { name: "MBA (Master of Business Administration)", desc: "A post-graduate degree for those who want to reach top management positions.", exams: ["CAT", "XAT", "GMAT"] }] },
             Entrepreneur: { title: "Entrepreneur", description: "You are a risk-taker with a desire to start your own business. You are innovative, motivated, and love a challenge.", degrees: [{ name: "BBA (Bachelor of Business Administration)", desc: "Provides a great foundation in business principles and management.", exams: ["CET", "SET", "IPMAT"] }, { name: "B.Com (Bachelor of Commerce)", desc: "Teaches you the basics of finance and accounting for your business.", exams: ["CUET", "university-specific exams"] }, { name: "Any B.Tech/B.E. or B.A.", desc: "Your degree doesn't matter as much as your passion and skills.", exams: ["No specific exams, focus on business plan"] }] },
@@ -78,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Doctor: { title: "Doctor", description: "You are a compassionate person with a strong interest in medicine. You are dedicated to helping others and improving their health.", degrees: [{ name: "MBBS", desc: "The standard medical degree for a career as a doctor.", exams: ["NEET UG"] }, { name: "B.Sc. in Biology", desc: "A degree that provides a strong foundation for a career in medicine.", exams: ["CUET", "NEET UG"] }, { name: "B.Sc. in Biomedical Science", desc: "A degree that focuses on the biological and medical sciences.", exams: ["CUET", "university-specific exams"] }] },
             Nurse: { title: "Nurse", description: "You are a caring and empathetic person who enjoys helping others. This is a rewarding career in healthcare.", degrees: [{ name: "B.Sc. in Nursing", desc: "The standard degree for a career as a nurse.", exams: ["NEET UG", "AIIMS Nursing"] }, { name: "GNM (General Nursing and Midwifery)", desc: "A diploma course that provides a strong foundation for a career in nursing.", exams: ["No specific entrance exams, university-specific exams"] }, { name: "A.N.M (Auxiliary Nurse Midwifery)", desc: "A diploma course that focuses on nursing and midwifery.", exams: ["No specific entrance exams, university-specific exams"] }] },
             Dentist: { title: "Dentist", description: "You are interested in oral health and enjoy working with your hands. This is a career for those who are precise and detail-oriented.", degrees: [{ name: "BDS (Bachelor of Dental Surgery)", desc: "The standard degree for a career as a dentist.", exams: ["NEET UG"] }, { name: "B.Sc. in Dental Hygiene", desc: "A degree that focuses on dental hygiene and oral health.", exams: ["university-specific exams"] }, { name: "B.Sc. in Dental Technology", desc: "A degree that focuses on dental technology and prosthetics.", exams: ["university-specific exams"] }] },
-            PhysicalTherapist: { title: "Physical Therapist", description: "You are passionate about helping people recover from injuries and improve their mobility. This is a hands-on career in healthcare.", degrees: [{ name: "BPT (Bachelor of Physical Therapy)", desc: "The standard degree for a career as a physical therapist.", exams: ["CET", "university-specific exams"] }, { name: "B.Sc. in Kinesiology", desc: "A degree that focuses on the study of human movement.", exams: ["CUET", "university-specific exams"] }, { name: "B.Sc. in Exercise Science", desc: "A degree that focuses on exercise and rehabilitation.", exams: ["CUET", "university-specific exams"] }] },
+            PhysicalTherapist: { title: "Physical Therapist", description: "You are passionate about helping people recover from injuries and improve their mobility. This is a hands-on career in healthcare.", degrees: [{ name: "BPT (Bachelor of Physical Therapy)", desc: "The standard degree for a career as a physical therapist.", exams: ["CET", "university-specific exams"] }, { name: "B.Sc. in Kinesiology", desc: "A degree that focuses on the study of human movement.", exams: ["CUET", "university-specific exams"] }, { name: "B.Sc. in Exercise Science", desc: "A degree that focuses on exercise and rehabilitation.", exams: ["CUET", "university-specific exams"] }, { name: "M.Sc. in Physical Therapy", desc: "A post-graduate degree for advanced roles in physical therapy.", exams: ["GATE", "CUET-PG"] }] },
             MedicalResearcher: { title: "Medical Researcher", description: "You are a curious person who loves to solve puzzles. This career is for those who want to find cures for diseases and advance medical knowledge.", degrees: [{ name: "B.Sc. in Medical Research", desc: "A specialized degree for a career in medical research.", exams: ["CUET", "university-specific exams"] }, { name: "B.Sc. in Biomedical Science", desc: "A degree that focuses on the biological and medical sciences.", exams: ["CUET", "university-specific exams"] }, { name: "MBBS", desc: "A medical degree that provides a strong foundation for a career in medical research.", exams: ["NEET UG"] }] },
             Biotechnologist: { title: "Biotechnologist", description: "You are fascinated by the intersection of biology and technology. This is a cutting-edge career in science and medicine.", degrees: [{ name: "B.Sc. in Biotechnology", desc: "A specialized degree for a career in biotechnology.", exams: ["CUET", "university-specific exams"] }, { name: "B.Tech/B.E. in Biotechnology", desc: "A specialized engineering degree for a career in biotechnology.", exams: ["JEE Main", "BITSAT"] }, { name: "M.Sc. in Biotechnology", desc: "A post-graduate degree for advanced roles in biotechnology.", exams: ["GATE", "CUET-PG"] }] },
             Epidemiologist: { title: "Epidemiologist", description: "You are a data-driven person who wants to understand and prevent the spread of diseases. This is a career for those who are analytical and passionate about public health.", degrees: [{ name: "B.Sc. in Epidemiology", desc: "A specialized degree for a career in epidemiology.", exams: ["CUET", "university-specific exams"] }, { name: "B.Sc. in Public Health", desc: "A degree that focuses on public health and disease prevention.", exams: ["CUET", "university-specific exams"] }, { name: "M.P.H. (Master of Public Health)", desc: "A post-graduate degree for advanced roles in public health.", exams: ["university-specific exams"] }] },
@@ -90,6 +196,33 @@ document.addEventListener('DOMContentLoaded', () => {
             PoliceOfficer: { title: "Police Officer", description: "You are a person who wants to serve your community and protect others. This is a challenging and rewarding career for those who are brave and dedicated.", degrees: [{ name: "B.A. in Criminology", desc: "A degree that provides a strong foundation in criminology and law enforcement.", exams: ["CUET", "university-specific exams"] }, { name: "B.A. in Public Administration", desc: "A degree that focuses on public administration and law enforcement.", exams: ["CUET", "university-specific exams"] }, { name: "B.A. in Sociology", desc: "A degree that focuses on social issues and law enforcement.", exams: ["CUET", "university-specific exams"] }] },
             MilitaryOfficer: { title: "Military Officer", description: "You are a disciplined and patriotic person who wants to serve your country. This is a demanding career that offers great leadership opportunities.", degrees: [{ name: "B.A. in Military Science", desc: "A specialized degree for a career in the military.", exams: ["NDA", "CDS"] }, { name: "B.A. in Political Science", desc: "A degree that provides a strong foundation in political science and military history.", exams: ["CUET", "university-specific exams"] }, { name: "B.E./B.Tech. in any discipline", desc: "An engineering degree that is highly valued in the military.", exams: ["JEE Main", "BITSAT", "NDA", "CDS"] }] },
             Lawyer: { title: "Lawyer", description: "You have a strong sense of justice and enjoy debating and persuading others. This is a challenging career that offers great opportunities to help others.", degrees: [{ name: "LLB (Bachelor of Law)", desc: "The standard law degree for a career as a lawyer.", exams: ["LSAT India", "AILET"] }, { name: "B.A. in Political Science", desc: "A degree that provides a strong foundation in political science and law.", exams: ["CUET", "university-specific exams"] }, { name: "B.Com LLB", desc: "A combined degree for a career in corporate law.", exams: ["CLAT", "LSAT India", "AILET"] }] },
+
+            // Additional non-technical career options
+            SalesManager: { title: "Sales Manager", description: "Lead sales teams, set targets, and grow revenue through strategy and relationships.", degrees: [{ name: "BBA (Sales & Marketing)", desc: "Foundation in sales processes and management.", exams: ["CET", "SET", "IPMAT"] }, { name: "B.Com (Marketing)", desc: "Commerce fundamentals with marketing focus.", exams: ["CUET"] }, { name: "MBA (Marketing/Sales)", desc: "Advanced leadership in sales and marketing.", exams: ["CAT", "XAT", "GMAT"] }] },
+            RetailManager: { title: "Retail Manager", description: "Run store operations, merchandising, and customer experience.", degrees: [{ name: "BBA (Retail Management)", desc: "Specialization in retail operations.", exams: ["CET", "SET"] }, { name: "Diploma in Retail", desc: "Short program focused on retail basics.", exams: ["Institute-specific"] }, { name: "MBA (Retail)", desc: "Advanced retail strategy and analytics.", exams: ["CAT", "XAT", "GMAT"] }] },
+            SupplyChainManager: { title: "Supply Chain Manager", description: "Manage sourcing, logistics, and inventory for efficient delivery.", degrees: [{ name: "BBA (Logistics & SCM)", desc: "Undergraduate focus on logistics.", exams: ["CET", "SET"] }, { name: "B.Tech in Industrial Engineering", desc: "Engineering perspective on operations.", exams: ["JEE Main"] }, { name: "MBA (Operations/SCM)", desc: "Advanced operations and supply chain.", exams: ["CAT", "XAT", "GMAT"] }] },
+            HospitalityManager: { title: "Hospitality Manager", description: "Oversee guest services and operations in hotels and resorts.", degrees: [{ name: "BHM (Hotel Management)", desc: "Core hotel operations and hospitality.", exams: ["NCHM JEE"] }, { name: "BBA (Hospitality)", desc: "Business plus hospitality.", exams: ["CET"] }, { name: "MBA (Hospitality)", desc: "Leadership in hospitality sector.", exams: ["CAT", "XAT"] }] },
+            HotelManager: { title: "Hotel Manager", description: "Manage departments, staff, and guest satisfaction in hotels.", degrees: [{ name: "BHM (Hotel Management)", desc: "Hotel operations from front office to F&B.", exams: ["NCHM JEE"] }, { name: "Diploma in Hotel Ops", desc: "Hands-on hotel training.", exams: ["Institute-specific"] }, { name: "MBA (Hospitality)", desc: "Strategy and leadership in hospitality.", exams: ["CAT", "XAT"] }] },
+            TourismManager: { title: "Tourism Manager", description: "Design travel products and manage tourism operations.", degrees: [{ name: "BTTM (Travel & Tourism)", desc: "Undergraduate in tourism management.", exams: ["CET"] }, { name: "B.A. Tourism Studies", desc: "Tourism theory and practice.", exams: ["CUET"] }, { name: "MBA (Tourism)", desc: "Advanced tourism management.", exams: ["CAT", "XAT"] }] },
+            TravelAgent: { title: "Travel Consultant", description: "Plan trips, itineraries, and bookings for clients.", degrees: [{ name: "Diploma in Travel & Ticketing", desc: "Reservation systems and itineraries.", exams: ["Institute-specific"] }, { name: "BTTM", desc: "Travel and tourism basics.", exams: ["CET"] }, { name: "IATA Certification", desc: "Industry-recognized credential.", exams: ["IATA"] }] },
+            EventPlanner: { title: "Event Planner", description: "Plan and execute events, weddings, and conferences.", degrees: [{ name: "Diploma in Event Mgmt", desc: "Event operations and vendor mgmt.", exams: ["Institute-specific"] }, { name: "BBA (Event Management)", desc: "Business approach to events.", exams: ["CET"] }, { name: "Certification in Wedding Planning", desc: "Specialized event niche.", exams: ["Institute-specific"] }] },
+            InteriorDesigner: { title: "Interior Designer", description: "Design functional and aesthetic interiors.", degrees: [{ name: "B.Des (Interior)", desc: "Formal training in interior design.", exams: ["NID DAT", "UCEED"] }, { name: "B.Sc. Interior Design", desc: "Science-based design program.", exams: ["CUET"] }, { name: "Diploma in Interior Design", desc: "Portfolio-focused program.", exams: ["Institute-specific"] }] },
+            FashionDesigner: { title: "Fashion Designer", description: "Create apparel and accessories with style and function.", degrees: [{ name: "B.Des (Fashion)", desc: "End-to-end fashion design.", exams: ["NIFT", "NID DAT"] }, { name: "B.F.A. (Fashion)", desc: "Fine arts approach to fashion.", exams: ["CUET"] }, { name: "Diploma in Fashion Design", desc: "Hands-on design and tailoring.", exams: ["Institute-specific"] }] },
+            PRSpecialist: { title: "Public Relations Specialist", description: "Manage brand reputation and media relations.", degrees: [{ name: "B.A. Mass Communication", desc: "Media and communication fundamentals.", exams: ["CUET"] }, { name: "BBA (Marketing)", desc: "Brand and stakeholder mgmt.", exams: ["CET"] }, { name: "PG Diploma in PR", desc: "Specialized PR program.", exams: ["Institute-specific"] }] },
+            RealEstateAgent: { title: "Real Estate Consultant", description: "Broker property deals and advise clients.", degrees: [{ name: "Certification in Real Estate", desc: "Regulatory and sales basics.", exams: ["State/Institute-specific"] }, { name: "BBA (Sales)", desc: "Sales skills for property market.", exams: ["CET"] }, { name: "RERA Certification", desc: "Regulatory compliance credential.", exams: ["RERA"] }] },
+            FlightAttendant: { title: "Flight Attendant", description: "Ensure passenger safety and service onboard flights.", degrees: [{ name: "Diploma in Cabin Crew", desc: "Grooming, safety, and service.", exams: ["Airline selection"] }, { name: "Hospitality Certification", desc: "Service excellence.", exams: ["Institute-specific"] }, { name: "First Aid & Safety", desc: "Safety preparedness.", exams: ["Institute-specific"] }] },
+            Nutritionist: { title: "Nutritionist", description: "Advise on diet, wellness, and lifestyle.", degrees: [{ name: "B.Sc. Nutrition & Dietetics", desc: "Core nutrition science.", exams: ["CUET"] }, { name: "M.Sc. Dietetics", desc: "Advanced clinical practice.", exams: ["CUET-PG"] }, { name: "Registered Dietitian (RD)", desc: "Professional credential.", exams: ["Association-specific"] }] },
+            FitnessTrainer: { title: "Fitness Trainer", description: "Coach clients on exercise and fitness goals.", degrees: [{ name: "Certification (ACE/NSCA/ISSA)", desc: "Industry-recognized PT certs.", exams: ["Provider exams"] }, { name: "B.Sc. Sports Science", desc: "Exercise and physiology.", exams: ["CUET"] }, { name: "CPR/First Aid", desc: "Safety certification.", exams: ["Provider exams"] }] },
+            SocialWorker: { title: "Social Worker", description: "Support communities and vulnerable groups.", degrees: [{ name: "B.S.W. (Social Work)", desc: "Undergraduate social work.", exams: ["CUET"] }, { name: "M.S.W.", desc: "Advanced practice and policy.", exams: ["CUET-PG"] }, { name: "PG Diploma in Counseling", desc: "Applied counseling skills.", exams: ["Institute-specific"] }] },
+            Musician: { title: "Musician", description: "Perform, compose, or produce music across genres.", degrees: [{ name: "B.A./B.Mus (Music)", desc: "Music theory and performance.", exams: ["University auditions"] }, { name: "Diploma in Music Production", desc: "DAWs and studio work.", exams: ["Institute-specific"] }, { name: "Grade Certifications", desc: "Trinity/ABRSM, etc.", exams: ["Board exams"] }] },
+            Actor: { title: "Actor", description: "Perform for screen or stage with craft and presence.", degrees: [{ name: "Diploma in Acting", desc: "Acting techniques and camera presence.", exams: ["Institute audition"] }, { name: "B.A. Theatre/Drama", desc: "Theatre fundamentals.", exams: ["CUET", "Audition"] }, { name: "Workshops & Portfolio", desc: "Continuous skill development.", exams: ["—"] }] },
+            Photographer: { title: "Photographer", description: "Capture and edit images for stories and brands.", degrees: [{ name: "B.F.A. Photography", desc: "Artistic and technical photography.", exams: ["CUET"] }, { name: "Diploma in Photography", desc: "Portfolio-focused program.", exams: ["Institute-specific"] }, { name: "Workshops & Certifications", desc: "Lighting, editing, genre-specific.", exams: ["—"] }] },
+            FashionStylist: { title: "Fashion Stylist", description: "Curate looks for shoots, celebs, and campaigns.", degrees: [{ name: "Diploma in Styling", desc: "Wardrobe and styling.", exams: ["Institute-specific"] }, { name: "B.Des (Fashion)", desc: "Design and styling base.", exams: ["NIFT"] }, { name: "Apprenticeship", desc: "On-ground experience.", exams: ["—"] }] },
+            Chef: { title: "Chef", description: "Create and manage culinary experiences.", degrees: [{ name: "BHMCT / Culinary Arts", desc: "Professional culinary training.", exams: ["NCHM JEE"] }, { name: "Diploma in Culinary Arts", desc: "Kitchen fundamentals.", exams: ["Institute-specific"] }, { name: "Apprenticeship", desc: "Kitchen brigade training.", exams: ["—"] }] },
+            SportsCoach: { title: "Sports Coach", description: "Train athletes and design practice programs.", degrees: [{ name: "B.P.Ed / M.P.Ed", desc: "Physical education degrees.", exams: ["University-specific"] }, { name: "Coaching Certifications", desc: "Sport federation certs.", exams: ["Federation exams"] }, { name: "Sports Science Courses", desc: "Applied performance.", exams: ["Institute-specific"] }] },
+            Librarian: { title: "Librarian", description: "Manage information resources and reader services.", degrees: [{ name: "B.Lib / M.Lib", desc: "Library and information science.", exams: ["University-specific"] }, { name: "B.A. in English/History", desc: "Complementary humanities degree.", exams: ["CUET"] }, { name: "Digital Curation Certs", desc: "Archives and digital libraries.", exams: ["Institute-specific"] }] },
+            HumanResourceExecutive: { title: "HR Executive", description: "Recruitment, onboarding, and employee relations.", degrees: [{ name: "BBA (HR)", desc: "Human resource fundamentals.", exams: ["CET"] }, { name: "MBA (HR)", desc: "Advanced HR leadership.", exams: ["CAT", "XAT", "GMAT"] }, { name: "PG Diploma in HRM", desc: "Specialized HR program.", exams: ["Institute-specific"] }] },
+            ContentStrategist: { title: "Content Strategist", description: "Plan content to meet brand and audience goals.", degrees: [{ name: "B.A. Mass Communication", desc: "Content and media planning.", exams: ["CUET"] }, { name: "PG Diploma in Digital Marketing", desc: "Channels and analytics.", exams: ["Institute-specific"] }, { name: "Certs (SEO/Analytics)", desc: "Tool-based upskilling.", exams: ["Provider exams"] }] },
         }
     };
 
@@ -149,8 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to restart the quiz
     const restartQuiz = () => {
-        state.currentQuestionIndex = 0;
-        state.scores = {};
+        window.state.currentQuestionIndex = 0;
+        window.state.scores = {};
         elements.progressBarContainer.classList.add('hidden');
         elements.progressBar.style.width = '0%';
         showScreen('welcome1');
@@ -158,14 +291,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to render the current question
     const renderQuestion = () => {
-        const currentQuizQuestions = questions[state.quizType];
-        if (state.currentQuestionIndex < currentQuizQuestions.length) {
-            const currentQuestion = currentQuizQuestions[state.currentQuestionIndex];
+        const currentQuizQuestions = questions[window.state.quizType];
+        if (window.state.currentQuestionIndex < currentQuizQuestions.length) {
+            const currentQuestion = currentQuizQuestions[window.state.currentQuestionIndex];
             elements.questionText.textContent = currentQuestion.question;
             elements.optionsContainer.innerHTML = '';
-            elements.progressText.textContent = `Question ${state.currentQuestionIndex + 1} of ${currentQuizQuestions.length}`;
+            elements.progressText.textContent = `Question ${window.state.currentQuestionIndex + 1} of ${currentQuizQuestions.length}`;
             
-            const progressPercentage = ((state.currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
+            const progressPercentage = ((window.state.currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
             elements.progressBar.style.width = `${progressPercentage}%`;
 
             currentQuestion.options.forEach(option => {
@@ -198,10 +331,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectAnswer = (option) => {
         // Update scores
         for (const key in option.score) {
-            state.scores[key] = (state.scores[key] || 0) + option.score[key];
+            window.state.scores[key] = (window.state.scores[key] || 0) + option.score[key];
         }
         // Move to next question
-        state.currentQuestionIndex++;
+        window.state.currentQuestionIndex++;
         renderQuestion();
     };
 
@@ -210,22 +343,22 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.progressBarContainer.classList.add('hidden');
         let maxScore = 0;
         let resultKey = '';
-        for (const key in state.scores) {
-            if (state.scores[key] > maxScore) {
-                maxScore = state.scores[key];
+        for (const key in window.state.scores) {
+            if (window.state.scores[key] > maxScore) {
+                maxScore = window.state.scores[key];
                 resultKey = key;
             }
         }
         
-        state.finalResult = resultsData[state.quizType][resultKey].title;
-        elements.resultTitle.textContent = state.finalResult;
-        elements.resultDescription.textContent = resultsData[state.quizType][resultKey].description;
+        window.state.finalResult = resultsData[window.state.quizType][resultKey].title;
+        elements.resultTitle.textContent = window.state.finalResult;
+        elements.resultDescription.textContent = resultsData[window.state.quizType][resultKey].description;
         
         // Show degrees for 12th grade
-        if (state.quizType === '12th') {
+        if (window.state.quizType === '12th') {
             elements.degreesContainer.classList.remove('hidden');
             elements.degreesList.innerHTML = '';
-            const degrees = resultsData[state.quizType][resultKey].degrees;
+            const degrees = resultsData[window.state.quizType][resultKey].degrees;
             if (degrees && degrees.length > 0) {
                 degrees.forEach(degree => {
                     const examsListHtml = degree.exams && degree.exams.length > 0 ?
@@ -262,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             // Generate roadmap content based on the career result
-            const roadmapContent = generateRoadmapContent(state.finalResult);
+            const roadmapContent = generateRoadmapContent(window.state.finalResult);
             elements.roadmapContent.innerHTML = roadmapContent;
             
         } catch (error) {
@@ -272,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3 class="text-xl font-bold mb-4">Your Career Roadmap</h3>
                     <p>An error occurred while generating the roadmap. Here's a basic roadmap for your career path.</p>
                     <div class="mt-6 text-left">
-                        ${generateBasicRoadmap(state.finalResult)}
+                        ${generateBasicRoadmap(window.state.finalResult)}
                     </div>
                 </div>
             `;
@@ -919,7 +1052,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const options = {
                 margin: 10,
-                filename: `${state.finalResult.replace(/[^a-zA-Z0-9]/g, '_')}_Roadmap.pdf`,
+                filename: `${window.state.finalResult.replace(/[^a-zA-Z0-9]/g, '_')}_Roadmap.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
                     scale: 2,
@@ -1080,7 +1213,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.startJourneyBtn.addEventListener('click', () => {
         const name = elements.nameInput.value.trim();
         if (name) {
-            state.userName = name;
+            window.state.userName = name;
             localStorage.setItem('userName', name);
             elements.userDisplayName.textContent = `Welcome, ${name}`;
             elements.userSection.classList.remove('hidden');
@@ -1092,12 +1225,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     elements.button10th.addEventListener('click', () => {
-        state.quizType = '10th';
+        window.state.quizType = '10th';
         showScreen('quizIntro');
     });
 
     elements.button12th.addEventListener('click', () => {
-        state.quizType = '12th';
+        window.state.quizType = '12th';
         showScreen('quizIntro');
     });
 
@@ -1143,7 +1276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Logout functionality
     elements.logoutBtn.addEventListener('click', () => {
         // Clear user data
-        state.userName = '';
+        window.state.userName = '';
         localStorage.removeItem('userName');
         
         // Hide user section
@@ -1182,9 +1315,9 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.darkModeToggle.innerHTML = '<i class="fas fa-moon text-gray-800"></i><span class="icon-fallback"></span>';
     }
 
-    if (state.userName) {
-        elements.nameInput.value = state.userName;
-        elements.userDisplayName.textContent = `Welcome, ${state.userName}`;
+    if (window.state.userName) {
+        elements.nameInput.value = window.state.userName;
+        elements.userDisplayName.textContent = `Welcome, ${window.state.userName}`;
         elements.userSection.classList.remove('hidden');
         showScreen('welcome1');
     } else {
